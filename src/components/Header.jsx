@@ -15,11 +15,11 @@ function Header() {
   const [theme, setTheme] = useState(() => {
     return localStorage.getItem("theme") || "bg-gray-950";
   });
-  const [label, setLabel] = useState("🌙");
+  const [label, setLabel] = useState("🔆");
 
   const toggleTheme = () => {
-    setTheme((prev) => prev === "bg-gray-950" ? "bg-white" : "bg-gray-950");
-    setLabel((prev) => (prev === "🌙" ? "🔆" : "🌙"));
+    setTheme((prev) => (prev === "bg-gray-950" ? "bg-white" : "bg-gray-950"));
+    setLabel((prev) => (prev === "🔆" ? "🌙" : "🔆"));
   };
 
   useEffect(() => {
@@ -28,10 +28,10 @@ function Header() {
   }, [theme]);
 
   return (
-    <header className="text-yellow-600 p-4 flex justify-between items-center">
-      {/* Website Title */}
+    <header className="text-yellow-500 p-4 flex justify-between items-center">
+      {/* Website Title: Should be centered */}
       <NavLink to="/">
-        <h2 className="text-2xl font-extrabold">Another Shop</h2>
+        <h2 className="text-2xl font-extrabold">AnotherShop</h2>
       </NavLink>
       {/* Navigation and Cart */}
       <nav className="flex items-center space-x-4">
@@ -41,26 +41,28 @@ function Header() {
         <Link to={"./Sale"} className="text-xl hover:scale-125">
           <RiDiscountPercentFill />
         </Link>
-        <button
-          className="h-8 rounded text-xl font-bold hover:scale-125 cursor-pointer"
-          aria-label="Toggle light/dark theme" onClick={toggleTheme}
-        >{label}
-        </button>
-        <div className="relative ml-4">
-          <button className="text-yellow-600 pr-2 text-xl hover:scale-125 cursor-pointer">
+        <div className="relative flex items-center">
+          <button className="text-yellow-500 pr-2 text-xl hover:scale-125 cursor-pointer">
             <FaHeart />
           </button>
           <NavLink to="/cart">
-            <button className="text-orange-600 p-1 text-2xl hover:scale-125 cursor-pointer">
+            <button className="text-orange-500 p-1 text-xl hover:scale-125 cursor-pointer">
               <IoBagHandleSharp />
             </button>
             {/* Cart Counter */}
             {cartCount > 0 && (
-              <span className="absolute -top-2 -right-2 text-white bg-orange-600 font-semibold rounded-full text-xs px-1">
+              <span className="absolute top-2 right-2 text-white bg-orange-500 font-semibold rounded-full text-xs px-1">
                 {cartCount}
               </span>
             )}
           </NavLink>
+          <button
+            className="h-7 rounded text-lg ml-2 font-bold hover:scale-125 cursor-pointer bg-amber-700 px-1.5 text-white"
+            aria-label="Toggle light/dark theme"
+            onClick={toggleTheme}
+          >
+            {label}
+          </button>
         </div>
       </nav>
     </header>

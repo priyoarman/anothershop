@@ -18,9 +18,7 @@ function App() {
   return (
     <BrowserRouter>
       {/* Header Component with Cart Count */}
-      <Header
-        cartCount={cart.length}
-      />
+      <Header cartCount={cart.length} />
 
       {/* define app routes */}
       <Routes>

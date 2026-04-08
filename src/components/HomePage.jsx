@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import ProductCard from "./ProductCard";
 import Filters from "./Filters";
+import HeroSlider from "./HeroSlider";
 
 function HomePage({
   searchInput,
@@ -50,16 +51,9 @@ function HomePage({
   });
 
   return (
-    <main className="p-6 min-h-screen auto-rows-fr">
-      {/* Welcome Section */}
-      <section className="text-center mb-8">
-        <h2 className="text-xl font-semibold text-yellow-600">
-          Welcome to Another Shop!
-        </h2>
-        <p className="mt-4 text-yellow-700">
-          Explore our wide range of products below.
-        </p>
-      </section>
+    <main className="pb-6 min-h-screen auto-rows-fr">
+      {/* Hero Slider Section */}
+      <HeroSlider />
 
       {/* Filters Section */}
       <Filters
