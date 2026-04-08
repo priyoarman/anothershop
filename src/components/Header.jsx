@@ -15,7 +15,12 @@ function Header() {
   const [theme, setTheme] = useState(() => {
     return localStorage.getItem("theme") || "bg-gray-950";
   });
-  const [label, setLabel] = useState("🔆");
+  const [label, setLabel] = useState(() => {
+    const savedTheme = localStorage.getItem("theme");
+    return savedTheme === "bg-gray-950" ? "🌙" : "🔆";
+  });
+
+  const isDarkMode = theme === "bg-gray-950";
 
   const toggleTheme = () => {
     setTheme((prev) => (prev === "bg-gray-950" ? "bg-white" : "bg-gray-950"));
@@ -28,25 +33,31 @@ function Header() {
   }, [theme]);
 
   return (
-    <header className="sticky top-0 z-50 text-yellow-500 p-4 flex justify-between items-center bg-white/95 backdrop-blur shadow-sm">
+    <header
+      className={`sticky top-0 z-50 p-4 flex justify-between items-center backdrop-blur shadow-sm transition-colors duration-500 ${
+        isDarkMode
+          ? "bg-slate-950/95 text-yellow-500"
+          : "bg-white/95 text-yellow-600"
+      }`}
+    >
       {/* Website Title: Should be centered */}
       <NavLink to="/">
         <h2 className="text-2xl font-extrabold">AnotherShop</h2>
       </NavLink>
       {/* Navigation and Cart */}
       <nav className="flex items-center space-x-4">
-        <a href="/" className="text-xl hover:scale-125">
+        <a href="/" className="text-xl hover:scale-115">
           <IoHome />
         </a>
-        <Link to={"./Sale"} className="text-xl hover:scale-125">
+        <Link to={"./Sale"} className="text-xl hover:scale-115">
           <RiDiscountPercentFill />
         </Link>
         <div className="flex items-center">
-          <button className="text-yellow-500 pr-2 text-xl hover:scale-125 cursor-pointer">
+          <button className="pr-2 text-xl hover:scale-115 cursor-pointer">
             <FaHeart />
           </button>
           <NavLink to="/cart" className="relative">
-            <button className="text-orange-500 p-1 text-xl hover:scale-125 cursor-pointer">
+            <button className="text-orange-500 p-1 text-xl hover:scale-115 cursor-pointer">
               <IoBagHandleSharp />
             </button>
             {/* Cart Counter */}
@@ -57,7 +68,7 @@ function Header() {
             )}
           </NavLink>
           <button
-            className="h-7 rounded text-lg ml-2 font-bold hover:scale-125 cursor-pointer bg-amber-700 px-1.5 text-white"
+            className="h-7 rounded text-lg ml-2 font-bold hover:scale-115 cursor-pointer bg-amber-700 px-1.5 text-white"
             aria-label="Toggle light/dark theme"
             onClick={toggleTheme}
           >

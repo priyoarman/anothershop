@@ -9,7 +9,7 @@ function ProductCard({ product }) {
 
   return (
     <Link to={`/products/${product.id}`}>
-      <div className="p-4 bg-orange-50 shadow-md rounded-lg flex flex-col items-center h-full hover:shadow-lg transition">
+      <div className="product-card p-4 bg-orange-50 shadow-md rounded-lg flex flex-col items-center h-full hover:shadow-lg transition-colors duration-500">
         {/* Product Image */}
         <img
           src={product.image}
@@ -19,12 +19,12 @@ function ProductCard({ product }) {
 
         <div className="p-4 flex flex-col flex-grow">
           {/* Product Title */}
-          <h3 className="text-lg font-semibold text-yellow-900 hover:text-pink-800 transition duration-300">
+          <h3 className="text-lg font-semibold text-yellow-900 hover:text-pink-800 transition duration-300 product-card-title">
             {product.title}
           </h3>
 
           {/* Product Price */}
-          <p className="text-yellow-700 font-semibold mb-8">€{product.price}</p>
+          <p className="text-yellow-700 font-semibold mb-8 product-card-price">€{product.price}</p>
         </div>
         {/* Add to Cart Button */}
         <button

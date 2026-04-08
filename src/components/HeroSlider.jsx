@@ -74,9 +74,9 @@ function HeroSlider() {
               }}
             />
             {/* Overlay */}
-            <div className="absolute inset-0 bg-black/30"></div>
+            <div className="hero-slide-overlay absolute inset-0 bg-black/30 transition-colors duration-500"></div>
             {/* Text Content */}
-            <div className="absolute inset-0 flex flex-col justify-center items-center text-center">
+            <div className="hero-slide-text absolute inset-0 flex flex-col justify-center items-center text-center transition-colors duration-500">
               <h2 className="text-4xl md:text-5xl font-bold text-white mb-4 drop-shadow-lg">
                 {slide.title}
               </h2>
