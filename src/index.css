@@ -27,6 +27,14 @@ body.bg-gray-950 .product-card-price {
   color: #e2e8f0;
 }
 
+.product-card-title {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 .hero-slide-overlay,
 .hero-slide-text,
 .product-card,

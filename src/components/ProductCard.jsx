@@ -9,39 +9,43 @@ function ProductCard({ product }) {
 
   return (
     <Link to={`/products/${product.id}`}>
-      <div className="product-card p-4 bg-orange-50 shadow-md rounded-lg flex flex-col items-center h-full hover:shadow-lg transition-colors duration-500">
+      <div className="product-card group flex aspect-[3/4] w-full flex-col overflow-hidden rounded-lg border border-transparent bg-orange-50 shadow-md transition-colors duration-500 hover:shadow-lg">
         {/* Product Image */}
-        <img
-          src={product.image}
-          alt={product.title}
-          className="w-full h-48 object-cover object-top mb-4 transform hover:scale-105 transition duration-300"
-        />
-
-        <div className="p-4 flex flex-col flex-grow">
-          {/* Product Title */}
-          <h3 className="text-lg font-semibold text-yellow-900 hover:text-pink-800 transition duration-300 product-card-title">
-            {product.title}
-          </h3>
-
-          {/* Product Price */}
-          <p className="text-yellow-700 font-semibold mb-8 product-card-price">
-            €{product.price}
-          </p>
+        <div className="relative h-52 w-full overflow-hidden bg-slate-100 flex-shrink-0">
+          <img
+            src={product.image}
+            alt={product.title}
+            className="h-full w-full min-h-full min-w-full object-cover object-top transition-transform duration-300 group-hover:scale-105"
+          />
         </div>
-        {/* Add to Cart Button */}
-        <button
-          onClick={(e) => {
-            e.preventDefault();
-            addToCart(product);
-            alert(`${product.title} added to Cart`);
-          }}
-          className="mt-4 bg-yellow-700 text-white py-2 px-3 rounded hover:bg-yellow-600 transition duration-300 cursor-pointer"
-        >
-          {" "}
-          <div className="flex flex-row justify-center items-center">
-            <IoCart className="mr-2" /> Add to Cart
+
+        <div className="flex flex-1 flex-col p-4">
+          <div className="min-h-[5rem]">
+            {/* Product Title */}
+            <h3 className="text-lg font-semibold text-yellow-900 transition-colors duration-300 product-card-title">
+              {product.title}
+            </h3>
           </div>
-        </button>
+
+          <div className="mt-auto grid w-full grid-cols-2">
+            <div className="flex h-8 items-center justify-center bg-gray-600 text-sm font-semibold text-orange-300 shadow-sm transition-colors duration-500 product-card-price">
+              €{product.price}
+            </div>
+            <button
+              onClick={(e) => {
+                e.preventDefault();
+                addToCart(product);
+                alert(`${product.title} added to Cart`);
+              }}
+              className="flex h-8 items-center justify-center border border-yellow-700 bg-yellow-700 text-sm font-semibold text-white transition-colors duration-300 hover:bg-yellow-600 cursor-pointer"
+            >
+              <div className="flex items-center gap-1">
+                <IoCart />
+                Add to Cart
+              </div>
+            </button>
+          </div>
+        </div>
       </div>
     </Link>
   );

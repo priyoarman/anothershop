@@ -68,7 +68,7 @@ function Header() {
             )}
           </NavLink>
           <button
-            className="h-7 rounded text-lg ml-2 font-bold hover:scale-115 cursor-pointer bg-amber-700 px-1.5 text-white"
+            className="h-7 rounded-xl text-lg ml-2 font-bold hover:scale-115 cursor-pointer bg-amber-700 px-1.5 text-white"
             aria-label="Toggle light/dark theme"
             onClick={toggleTheme}
           >
