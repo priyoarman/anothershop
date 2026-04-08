@@ -27,10 +27,10 @@ const ShoppingCart = () => {
 
   return (
     <div className="container mx-auto p-4">
-      <h1 className="text-3xl text-yellow-700 font-bold mb-6">Shopping Cart</h1>
+      <h1 className="text-xl text-yellow-700 font-bold mb-6">Shopping Cart</h1>
       <div className="space-y-4">
         {cartItems.map((item) => (
-          <div key={item.id} className="flex items-center p-4 bg-yellow-50 rounded shadow">
+          <div key={item.id} className="flex items-center p-4 rounded shadow">
             <img
               src={item.image}
               alt={item.title}

@@ -28,7 +28,7 @@ function Header() {
   }, [theme]);
 
   return (
-    <header className="text-yellow-500 p-4 flex justify-between items-center">
+    <header className="sticky top-0 z-50 text-yellow-500 p-4 flex justify-between items-center bg-white/95 backdrop-blur shadow-sm">
       {/* Website Title: Should be centered */}
       <NavLink to="/">
         <h2 className="text-2xl font-extrabold">AnotherShop</h2>
@@ -41,17 +41,17 @@ function Header() {
         <Link to={"./Sale"} className="text-xl hover:scale-125">
           <RiDiscountPercentFill />
         </Link>
-        <div className="relative flex items-center">
+        <div className="flex items-center">
           <button className="text-yellow-500 pr-2 text-xl hover:scale-125 cursor-pointer">
             <FaHeart />
           </button>
-          <NavLink to="/cart">
+          <NavLink to="/cart" className="relative">
             <button className="text-orange-500 p-1 text-xl hover:scale-125 cursor-pointer">
               <IoBagHandleSharp />
             </button>
             {/* Cart Counter */}
             {cartCount > 0 && (
-              <span className="absolute top-2 right-2 text-white bg-orange-500 font-semibold rounded-full text-xs px-1">
+              <span className="absolute -top-1 -right-1 text-white bg-orange-500 font-semibold rounded-full text-xs px-1">
                 {cartCount}
               </span>
             )}
