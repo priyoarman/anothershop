@@ -6,7 +6,9 @@ import { readFileSync } from "node:fs";
 import { google } from "@ai-sdk/google";
 import { groq } from "@ai-sdk/groq";
 import { convertToModelMessages, streamText } from "ai";
-import pdfParse from "pdf-parse";
+import { createRequire } from "node:module";
+const require = createRequire(import.meta.url);
+const pdfParse = require("pdf-parse");
 
 const projectRoot = join(dirname(fileURLToPath(import.meta.url)), "..");
 dotenv.config({ path: join(projectRoot, ".env") });

@@ -3,7 +3,9 @@ import { groq } from "@ai-sdk/groq";
 import { convertToModelMessages, streamText } from "ai";
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
-import pdfParse from "pdf-parse";
+import { createRequire } from "node:module";
+const require = createRequire(import.meta.url);
+const pdfParse = require("pdf-parse");
 
 // ─── Config ───────────────────────────────────────────────────────────────────
 
