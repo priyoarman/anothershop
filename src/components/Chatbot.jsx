@@ -136,10 +136,16 @@ function Chatbot() {
   const handleSubmit = (e) => {
     e.preventDefault();
     const trimmed = input.trim();
-    if (!trimmed || !isReady) return;
+    if (!trimmed || !isReady) {
+      inputRef.current?.focus();
+      return;
+    }
 
     sendMessage({ text: trimmed });
     setInput("");
+    requestAnimationFrame(() => {
+      inputRef.current?.focus();
+    });
   };
 
   const handleKeyDown = (e) => {
@@ -248,8 +254,7 @@ function Chatbot() {
                 onKeyDown={handleKeyDown}
                 placeholder="Type a message…"
                 rows={1}
-                disabled={!isReady}
-                className={`max-h-24 min-h-[2.5rem] flex-1 resize-none rounded-xl border px-3 py-2.5 text-sm outline-none transition-colors focus:ring-2 focus:ring-orange-500/40 disabled:opacity-60 ${
+                className={`max-h-24 min-h-[2.5rem] flex-1 resize-none rounded-xl border px-3 py-2.5 text-sm outline-none transition-colors focus:ring-2 focus:ring-orange-500/40 ${
                   isDarkMode
                     ? "border-slate-700 bg-slate-800 text-slate-100 placeholder:text-slate-500"
                     : "border-slate-200 bg-slate-50 text-slate-900 placeholder:text-slate-400"
