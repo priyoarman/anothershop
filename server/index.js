@@ -2,7 +2,7 @@ import dotenv from "dotenv";
 import { createServer } from "node:http";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
-import { google } from "@ai-sdk/google";
+import { openai } from "@ai-sdk/openai";
 import { convertToModelMessages, streamText } from "ai";
 
 const projectRoot = join(dirname(fileURLToPath(import.meta.url)), "..");
