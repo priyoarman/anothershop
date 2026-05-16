@@ -3,8 +3,7 @@ import { groq } from "@ai-sdk/groq";
 import { convertToModelMessages, streamText } from "ai";
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
-// pdf-parse/lib/pdf-parse.js avoids the auto-test side-effect on import
-import pdfParse from "pdf-parse/lib/pdf-parse.js";
+import pdfParse from "pdf-parse";
 
 // ─── Config ───────────────────────────────────────────────────────────────────
 
