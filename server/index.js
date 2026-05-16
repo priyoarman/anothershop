@@ -8,7 +8,8 @@ import { groq } from "@ai-sdk/groq";
 import { convertToModelMessages, streamText } from "ai";
 import { createRequire } from "node:module";
 const require = createRequire(import.meta.url);
-const pdfParse = require("pdf-parse");
+const _pdfParseModule = require("pdf-parse");
+const pdfParse = typeof _pdfParseModule === "function" ? _pdfParseModule : (_pdfParseModule.default ?? _pdfParseModule);
 
 const projectRoot = join(dirname(fileURLToPath(import.meta.url)), "..");
 dotenv.config({ path: join(projectRoot, ".env") });

@@ -5,7 +5,8 @@ import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { createRequire } from "node:module";
 const require = createRequire(import.meta.url);
-const pdfParse = require("pdf-parse");
+const _pdfParseModule = require("pdf-parse");
+const pdfParse = typeof _pdfParseModule === "function" ? _pdfParseModule : (_pdfParseModule.default ?? _pdfParseModule);
 
 // ─── Config ───────────────────────────────────────────────────────────────────
 
