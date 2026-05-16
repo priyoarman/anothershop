@@ -1,16 +1,16 @@
 import { google } from "@ai-sdk/google";
 import { groq } from "@ai-sdk/groq";
 import { convertToModelMessages, streamText } from "ai";
-
-export const config = {
-  runtime: 'edge',
-};
+import { getProductCatalogContext } from "../lib/productCatalogRag.js";
 
 const AI_PROVIDER = (process.env.AI_PROVIDER || "groq").toLowerCase();
 
 const SYSTEM_PROMPT = `You are the AnotherShop assistant, a friendly and helpful AI for an online store called AnotherShop.
 Help customers with product questions, orders, shipping, returns, and general shopping advice.
-Keep responses concise, warm, and practical. If you do not have specific order data, say so and suggest checking the cart or contacting support.`;
+Keep responses concise, warm, and practical.
+When answering product questions, use the Product Catalog Context below as your source of truth.
+If the catalog context does not contain the requested product detail, say you could not find that detail in the catalog instead of guessing.
+If you do not have specific order data, say so and suggest checking the cart or contacting support.`;
 
 function getModel() {
   if (AI_PROVIDER === "gemini") {
@@ -55,10 +55,14 @@ export default async function handler(req) {
     }
 
     const { model } = getModel();
+    const productCatalogContext = await getProductCatalogContext(messages);
+    const system = productCatalogContext
+      ? `${SYSTEM_PROMPT}\n\nProduct Catalog Context:\n${productCatalogContext}`
+      : SYSTEM_PROMPT;
 
     const result = streamText({
       model,
-      system: SYSTEM_PROMPT,
+      system,
       messages: await convertToModelMessages(messages),
     });
 
