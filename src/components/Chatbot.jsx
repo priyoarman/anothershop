@@ -25,7 +25,7 @@ function getFriendlyErrorMessage(error) {
   const raw = error?.message ?? "";
 
   if (raw.includes("insufficient_quota")) {
-    return "API quota exceeded. If using OpenAI, add billing at platform.openai.com — or switch to the free Gemini key in .env.";
+    return "Your OpenAI account has no remaining quota. Add billing or credits at platform.openai.com, then try again.";
   }
 
   if (raw.includes("API key") || raw.includes("GOOGLE_GENERATIVE_AI")) {
