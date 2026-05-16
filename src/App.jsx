@@ -7,6 +7,7 @@ import Main from "./components/HomePage";
 import ProductDetails from "./components/ProductDetails";
 import ShoppingCart from "./components/ShoppingCart";
 import Sale from "./components/Sale";
+import Chatbot from "./components/Chatbot";
 
 function App() {
   // State for managing search and category filters
@@ -42,6 +43,7 @@ function App() {
         <Route path="/cart" element={<ShoppingCart />} />
       </Routes>
       <Footer />
+      <Chatbot />
     </BrowserRouter>
   );
 }
