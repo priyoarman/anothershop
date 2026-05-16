@@ -24,12 +24,24 @@ const INITIAL_MESSAGES = [
 function getFriendlyErrorMessage(error) {
   const raw = error?.message ?? "";
 
-  if (raw.includes("insufficient_quota")) {
-    return "Your OpenAI account has no remaining quota. Add billing or credits at platform.openai.com, then try again.";
+  if (
+    raw.includes("quota") ||
+    raw.includes("Quota exceeded") ||
+    raw.includes("rate-limit")
+  ) {
+    return "Free tier limit hit. Switch to Groq: set AI_PROVIDER=groq and GROQ_API_KEY in .env (free key at console.groq.com), then restart npm run dev.";
   }
 
-  if (raw.includes("API key") || raw.includes("GOOGLE_GENERATIVE_AI")) {
-    return "Add a free Gemini API key to .env. Get one at aistudio.google.com/apikey";
+  if (raw.includes("insufficient_quota")) {
+    return "API quota exceeded. Try Groq (free) or wait a minute and retry.";
+  }
+
+  if (raw.includes("API key") || raw.includes("GROQ_API_KEY")) {
+    return "Add GROQ_API_KEY to .env — free key at console.groq.com/keys";
+  }
+
+  if (raw.includes("GOOGLE_GENERATIVE_AI")) {
+    return "Add GOOGLE_GENERATIVE_AI_API_KEY to .env — free key at aistudio.google.com/apikey";
   }
 
   try {
