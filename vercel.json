@@ -1,9 +1,4 @@
 {
-  "functions": {
-    "api/chat.js": {
-      "includeFiles": "public/rag_product_data_catalog.pdf"
-    }
-  },
   "rewrites": [
     {
       "source": "/((?!api/).*)",
