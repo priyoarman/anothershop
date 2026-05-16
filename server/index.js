@@ -15,10 +15,7 @@ Help customers with product questions, orders, shipping, returns, and general sh
 Keep responses concise, warm, and practical. If you do not have specific order data, say so and suggest checking the cart or contacting support.`;
 
 function getApiKey() {
-  return (
-    process.env.GOOGLE_GENERATIVE_AI_API_KEY?.trim() ||
-    process.env.GEMINI_API_KEY?.trim()
-  );
+  return process.env.OPENAI_API_KEY?.trim();
 }
 
 async function handleChat(req, res) {
@@ -35,14 +32,14 @@ async function handleChat(req, res) {
       res.end(
         JSON.stringify({
           error:
-            "No API key found. Add GOOGLE_GENERATIVE_AI_API_KEY to .env (free key: https://aistudio.google.com/apikey)",
+          "No API key found. Add OPENAI_API_KEY to .env",
         })
       );
       return;
     }
 
     const result = streamText({
-      model: google("gemini-2.0-flash"),
+      model: openai("gpt-4o"),
       system: SYSTEM_PROMPT,
       messages: await convertToModelMessages(messages),
     });
@@ -98,16 +95,16 @@ server.on("error", (err) => {
 
 server.listen(PORT, () => {
   console.log(`Chat API server running at http://localhost:${PORT}`);
-  console.log("Using Google Gemini (free tier)");
+  console.log("Using OpenAI GPT-4o");
 
   if (!getApiKey()) {
     console.warn(
-      "\n⚠️  GOOGLE_GENERATIVE_AI_API_KEY is missing from .env\n" +
-        "   Get a free key: https://aistudio.google.com/apikey\n" +
+      "\n⚠️  OPENAI_API_KEY is missing from .env\n" +
+        "   Get a key: https://platform.openai.com/api-keys\n" +
         "   Then add to .env:\n" +
-        "   GOOGLE_GENERATIVE_AI_API_KEY=your-key-here\n"
+        "   OPENAI_API_KEY=your-key-here\n"
     );
   } else {
-    console.log("Gemini API key loaded.");
+    console.log("OpenAI API key loaded.");
   }
 });
