@@ -9,7 +9,7 @@ function ProductCard({ product }) {
 
   return (
     <Link to={`/products/${product.id}`}>
-      <div className="product-card group flex aspect-[3/4] w-full flex-col overflow-hidden rounded-lg border border-transparent bg-orange-50 shadow-md transition-colors duration-500 hover:shadow-lg">
+      <div className="product-card group flex aspect-[3/4] w-full flex-col overflow-hidden rounded-lg border border-transparent bg-slate-50 shadow-md transition-colors duration-500 hover:shadow-lg">
         {/* Product Image */}
         <div className="relative h-52 w-full overflow-hidden bg-slate-100 flex-shrink-0">
           <img

@@ -36,8 +36,8 @@ function Header() {
     <header
       className={`sticky top-0 z-50 p-4 flex justify-between items-center backdrop-blur shadow-sm transition-colors duration-500 ${
         isDarkMode
-          ? "bg-slate-950/95 text-yellow-500"
-          : "bg-white/95 text-yellow-600"
+          ? "bg-slate-950/90 text-yellow-300"
+          : "bg-white/95 text-yellow-400"
       }`}
     >
       {/* Website Title: Should be centered */}
@@ -57,18 +57,18 @@ function Header() {
             <FaHeart />
           </button>
           <NavLink to="/cart" className="relative">
-            <button className="text-orange-500 p-1 text-xl hover:scale-115 cursor-pointer">
+            <button className="text-yellow-400 p-1 text-xl hover:scale-115 cursor-pointer">
               <IoBagHandleSharp />
             </button>
             {/* Cart Counter */}
             {cartCount > 0 && (
-              <span className="absolute -top-1 -right-1 text-white bg-orange-500 font-semibold rounded-full text-xs px-1">
+              <span className="absolute -top-1 -right-1 text-white bg-yellow-500 font-semibold rounded-full text-xs px-1">
                 {cartCount}
               </span>
             )}
           </NavLink>
           <button
-            className="h-7 rounded-xl text-lg ml-2 font-bold hover:scale-115 cursor-pointer bg-amber-700 px-1.5 text-white"
+            className="h-7 rounded-full text-lg ml-1 font-bold hover:scale-115 cursor-pointer px-1.5 text-yellow-400"
             aria-label="Toggle light/dark theme"
             onClick={toggleTheme}
           >

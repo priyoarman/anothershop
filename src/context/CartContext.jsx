@@ -8,25 +8,14 @@ export const useCart = () => useContext(CartContext);
 
 export const CartProvider = ({ children }) => {
   const [cartItems, setCartItems] = useState(() => {
-    const savedItems = localStorage.getItem('cartItems');
-    return savedItems ? JSON.parse(savedItems) : [];
-  });
-
-  // Load cart items from localStorage when the provider is mounted
-
-  useEffect(() => {
-    // console.log("CartProvider mounted. Attempting to load cart from localStorage...");
-    const storedCart = localStorage.getItem('cartItems');
-    if (storedCart) {
-      try {
-        const parsedItems = JSON.parse(storedCart);
-        // console.log("Loaded cart from localStorage:", parsedItems);
-        setCartItems(parsedItems);
-      } catch (error) {
-        console.error("Failed to parse cartItems from localStorage", error);
-      }
+    try {
+      const savedItems = localStorage.getItem('cartItems');
+      return savedItems ? JSON.parse(savedItems) : [];
+    } catch (error) {
+      console.error("Failed to parse cartItems from localStorage", error);
+      return [];
     }
-  }, []);
+  });
 
   // Save cart items to localStorage whenever they change
   
@@ -59,7 +48,10 @@ export const CartProvider = ({ children }) => {
     );
   };
 
-  const clearCart = () => setCartItems([]);
+  const clearCart = () => {
+    localStorage.setItem('cartItems', JSON.stringify([]));
+    setCartItems([]);
+  };
 
   const value = {
     cartItems,

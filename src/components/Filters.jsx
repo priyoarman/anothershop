@@ -14,14 +14,14 @@ function Filters({
         placeholder="Search products..."
         value={searchInput}
         onChange={(e) => setSearchInput(e.target.value)}
-        className="p-2 border border-gray-300 bg-orange-50 rounded shadow-sm focus:outline-none focus:ring-2 focus:ring-yellow-600"
+        className="p-2 border border-gray-300 bg-slate-50 rounded shadow-sm focus:outline-none focus:ring-2 focus:ring-yellow-400"
       />
 
       {/* Category Dropdown */}
       <select
         value={selectedCategory}
         onChange={(e) => setSelectedCategory(e.target.value)}
-        className="p-2 border border-gray-300 bg-orange-50 rounded shadow-sm focus:outline-none focus:ring-2 focus:ring-yellow-600"
+        className="p-2 border border-gray-300 bg-slate-50 rounded shadow-sm focus:outline-none focus:ring-2 focus:ring-yellow-400"
       >
         <option value="">All Categories</option>
         <option value="electronics">Electronics</option>

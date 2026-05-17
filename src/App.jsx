@@ -6,6 +6,8 @@ import Footer from "./components/Footer";
 import Main from "./components/HomePage";
 import ProductDetails from "./components/ProductDetails";
 import ShoppingCart from "./components/ShoppingCart";
+import CheckoutCancel from "./components/CheckoutCancel";
+import CheckoutSuccess from "./components/CheckoutSuccess";
 import Sale from "./components/Sale";
 import Chatbot from "./components/Chatbot";
 
@@ -18,31 +20,38 @@ function App() {
 
   return (
     <BrowserRouter>
-      {/* Header Component with Cart Count */}
-      <Header cartCount={cart.length} />
+      <div className="min-h-screen flex flex-col">
+        {/* Header Component with Cart Count */}
+        <Header cartCount={cart.length} />
 
-      {/* define app routes */}
-      <Routes>
-        {/* home page: shows Main (product list) */}
-        <Route
-          path="/"
-          element={
-            <Main
-              searchInput={searchInput}
-              setSearchInput={setSearchInput}
-              selectedCategory={selectedCategory}
-              setSelectedCategory={setSelectedCategory}
-              setCart={setCart}
+        <main className="flex-1">
+          {/* define app routes */}
+          <Routes>
+            {/* home page: shows Main (product list) */}
+            <Route
+              path="/"
+              element={
+                <Main
+                  searchInput={searchInput}
+                  setSearchInput={setSearchInput}
+                  selectedCategory={selectedCategory}
+                  setSelectedCategory={setSelectedCategory}
+                  setCart={setCart}
+                />
+              }
             />
-          }
-        />
 
-        {/* product details page */}
-        <Route path="/products/:id" element={<ProductDetails />} />
-        <Route path="/sale" element={<Sale />} />
-        <Route path="/cart" element={<ShoppingCart />} />
-      </Routes>
-      <Footer />
+            {/* product details page */}
+            <Route path="/products/:id" element={<ProductDetails />} />
+            <Route path="/sale" element={<Sale />} />
+            <Route path="/cart" element={<ShoppingCart />} />
+            <Route path="/checkout/success" element={<CheckoutSuccess />} />
+            <Route path="/checkout/cancel" element={<CheckoutCancel />} />
+          </Routes>
+        </main>
+
+        <Footer />
+      </div>
       <Chatbot />
     </BrowserRouter>
   );

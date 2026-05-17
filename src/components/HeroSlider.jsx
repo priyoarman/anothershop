@@ -53,7 +53,7 @@ function HeroSlider() {
   };
 
   return (
-    <div className="relative w-full h-148 bg-gray-200 overflow-hidden mb-6 group">
+    <div className="relative w-full h-148 bg-yellow-200 overflow-hidden mb-6 group">
       {/* Slides Container */}
       <div className="relative w-full h-full">
         {slides.map((slide, index) => (
