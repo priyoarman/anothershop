@@ -3,11 +3,8 @@ import { getCheckoutProduct, getPriceCents } from "../lib/checkoutCatalog.js";
 
 const CURRENCY = "eur";
 
-function jsonResponse(data, status = 200) {
-  return new Response(JSON.stringify(data), {
-    status,
-    headers: { "Content-Type": "application/json" },
-  });
+function sendJson(res, statusCode, data) {
+  res.status(statusCode).json(data);
 }
 
 function getStripe() {
@@ -31,10 +28,27 @@ function getStripe() {
 
 function getAppUrl(req) {
   return (
-    req.headers.get("origin") ||
+    req.headers.origin ||
     process.env.CLIENT_URL?.trim() ||
     "http://localhost:5173"
   );
+}
+
+async function readJsonBody(req) {
+  if (req.body && typeof req.body === "object") {
+    return req.body;
+  }
+
+  if (typeof req.body === "string") {
+    return JSON.parse(req.body || "{}");
+  }
+
+  let body = "";
+  for await (const chunk of req) {
+    body += chunk;
+  }
+
+  return body ? JSON.parse(body) : {};
 }
 
 function validateCheckoutItems(items) {
@@ -71,17 +85,19 @@ function validateCheckoutItems(items) {
   return { validatedItems };
 }
 
-export default async function handler(req) {
+export default async function handler(req, res) {
   if (req.method !== "POST") {
-    return jsonResponse({ error: "Method not allowed" }, 405);
+    sendJson(res, 405, { error: "Method not allowed" });
+    return;
   }
 
   try {
-    const { items } = await req.json();
+    const { items } = await readJsonBody(req);
     const { validatedItems, error } = validateCheckoutItems(items);
 
     if (error) {
-      return jsonResponse({ error }, 400);
+      sendJson(res, 400, { error });
+      return;
     }
 
     const appUrl = getAppUrl(req);
@@ -105,15 +121,14 @@ export default async function handler(req) {
       },
     });
 
-    return jsonResponse({
+    sendJson(res, 200, {
       url: session.url,
       sessionId: session.id,
     });
   } catch (error) {
     console.error("Checkout API error:", error);
-    return jsonResponse(
-      { error: error.message || "Failed to create checkout session." },
-      500
-    );
+    sendJson(res, 500, {
+      error: error.message || "Failed to create checkout session.",
+    });
   }
 }
