@@ -3,6 +3,8 @@ import { groq } from "@ai-sdk/groq";
 import { convertToModelMessages, streamText } from "ai";
 import { getProductCatalogContext } from "../lib/productCatalogRag.js";
 
+export const maxDuration = 30;
+
 const AI_PROVIDER = (process.env.AI_PROVIDER || "groq").toLowerCase();
 
 const SYSTEM_PROMPT = `You are the AnotherShop assistant, a friendly and helpful AI for an online store called AnotherShop.
@@ -39,19 +41,39 @@ function getKeyHint() {
   return "Add GROQ_API_KEY to Vercel environment variables.";
 }
 
-export default async function handler(req) {
+function sendJson(res, statusCode, data) {
+  res.status(statusCode).json(data);
+}
+
+async function readJsonBody(req) {
+  if (req.body && typeof req.body === "object") {
+    return req.body;
+  }
+
+  if (typeof req.body === "string") {
+    return JSON.parse(req.body || "{}");
+  }
+
+  let body = "";
+  for await (const chunk of req) {
+    body += chunk;
+  }
+
+  return body ? JSON.parse(body) : {};
+}
+
+export default async function handler(req, res) {
   if (req.method !== 'POST') {
-    return new Response('Method not allowed', { status: 405 });
+    sendJson(res, 405, { error: "Method not allowed" });
+    return;
   }
 
   try {
-    const { messages } = await req.json();
+    const { messages } = await readJsonBody(req);
 
     if (!getApiKey()) {
-      return new Response(JSON.stringify({ error: `No API key found. ${getKeyHint()}` }), {
-        status: 500,
-        headers: { "Content-Type": "application/json" }
-      });
+      sendJson(res, 500, { error: `No API key found. ${getKeyHint()}` });
+      return;
     }
 
     const { model } = getModel();
@@ -66,12 +88,29 @@ export default async function handler(req) {
       messages: await convertToModelMessages(messages),
     });
 
-    return result.toUIMessageStreamResponse();
+    const response = result.toUIMessageStreamResponse();
+
+    res.writeHead(response.status, Object.fromEntries(response.headers));
+
+    if (response.body) {
+      const reader = response.body.getReader();
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        res.write(value);
+      }
+    }
+
+    res.end();
   } catch (error) {
     console.error("Chat API error:", error);
-    return new Response(JSON.stringify({ error: error.message || "Failed to process chat request." }), {
-      status: 500,
-      headers: { "Content-Type": "application/json" }
-    });
+    if (!res.headersSent) {
+      sendJson(res, 500, {
+        error: error.message || "Failed to process chat request.",
+      });
+      return;
+    }
+
+    res.end();
   }
 }
