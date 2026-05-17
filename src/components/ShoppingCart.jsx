@@ -78,8 +78,8 @@ const ShoppingCart = () => {
               className="w-16 h-16 object-contain rounded"
             />
             <div className="ml-4 flex-grow">
-              <h2 className="text-lg text-yellow-700 font-bold">{item.title}</h2>
-              <p className="text-yellow-700">€{item.price} x {item.quantity}</p>
+              <h2 className="text-lg text-yellow-500 font-bold">{item.title}</h2>
+              <p className="text-yellow-500">€{item.price} x {item.quantity}</p>
             </div>
             <div>
               <input
@@ -89,12 +89,12 @@ const ShoppingCart = () => {
                 onChange={(e) =>
                   updateQuantity(item.id, Number(e.target.value))
                 }
-                className="w-16 text-yellow-700 border rounded p-1"
+                className="w-16 text-yellow-500 border rounded p-1"
               />
             </div>
             <button
               onClick={() => removeFromCart(item.id)}
-              className="ml-4 bg-orange-700 text-white py-1 px-3 rounded hover:bg-orange-600 cursor-pointer"
+              className="ml-4 bg-yellow-500 text-white py-1 px-3 rounded hover:bg-yellow-600 cursor-pointer"
             >
               Remove
             </button>
@@ -104,17 +104,17 @@ const ShoppingCart = () => {
       <div className="mt-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <button
           onClick={clearCart}
-          className="bg-orange-700 text-white py-2 px-4 rounded hover:bg-orange-600 cursor-pointer"
+          className="bg-yellow-500 text-white py-2 px-4 rounded hover:bg-yellow-600 cursor-pointer"
         >
           Clear Cart
         </button>
         <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
-          <div className="text-xl text-yellow-600 font-bold">Total: €{totalPrice}</div>
+          <div className="text-xl text-yellow-500 font-bold">Total: €{totalPrice}</div>
           <button
             type="button"
             onClick={handleCheckout}
             disabled={isCheckingOut}
-            className="bg-yellow-700 text-white py-2 px-5 rounded hover:bg-yellow-600 cursor-pointer"
+            className="bg-yellow-500 text-white py-2 px-5 rounded hover:bg-yellow-600 cursor-pointer"
           >
             {isCheckingOut ? 'Starting checkout...' : 'Checkout'}
           </button>
@@ -126,7 +126,7 @@ const ShoppingCart = () => {
         </p>
       )}
       <div className="mt-4">
-        <Link to="/" className="text-yellow-600 font-semibold hover:underline">
+        <Link to="/" className="text-yellow-500 font-semibold hover:text-yellow-600 hover:font-semibold">
           Continue shopping
         </Link>
       </div>
