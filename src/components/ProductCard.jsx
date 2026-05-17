@@ -22,29 +22,29 @@ function ProductCard({ product }) {
         <div className="flex flex-1 flex-col p-4">
           <div className="min-h-[5rem]">
             {/* Product Title */}
-            <h3 className="text-lg font-semibold text-yellow-900 transition-colors duration-300 product-card-title">
+            <h3 className="text-lg font-semibold text-yellow-600 transition-colors duration-300 product-card-title">
               {product.title}
             </h3>
           </div>
+        </div>
 
-          <div className="mt-auto grid w-full grid-cols-2">
-            <div className="flex h-8 items-center justify-center bg-gray-600 text-sm font-semibold text-orange-300 shadow-sm transition-colors duration-500 product-card-price">
-              €{product.price}
-            </div>
-            <button
-              onClick={(e) => {
-                e.preventDefault();
-                addToCart(product);
-                alert(`${product.title} added to Cart`);
-              }}
-              className="flex h-8 items-center justify-center border border-yellow-700 bg-yellow-700 text-sm font-semibold text-white transition-colors duration-300 hover:bg-yellow-600 cursor-pointer"
-            >
-              <div className="flex items-center gap-1">
-                <IoCart />
-                Add to Cart
-              </div>
-            </button>
+        <div className="mt-auto grid w-full grid-cols-2">
+          <div className="flex h-10 items-center justify-center bg-gray-800 text-[16px] font-semibold text-yellow-400 shadow-sm transition-colors duration-500 product-card-price">
+            €{product.price}
           </div>
+          <button
+            onClick={(e) => {
+              e.preventDefault();
+              addToCart(product);
+              alert(`${product.title} added to Cart`);
+            }}
+            className="flex h-10 items-center justify-center border border-yellow-500 bg-yellow-500 text-sm font-semibold text-white transition-colors duration-300 hover:bg-yellow-600 cursor-pointer"
+          >
+            <div className="flex items-center gap-1 text-white text-[16px] font-bold">
+              <IoCart />
+              Add to Cart
+            </div>
+          </button>
         </div>
       </div>
     </Link>

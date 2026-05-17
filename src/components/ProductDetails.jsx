@@ -34,7 +34,7 @@ function ProductDetails(){
 
   return (
     <div className="container mx-auto p-4">
-      <Link to="/" className="text-orange-600 hover:underline">&larr; Back to Products</Link>
+      <Link to="/" className="text-yellow-500 font-semibold hover:underline">&larr; Back to Products</Link>
       <div className="flex flex-col md:flex-row mt-18">
         <img
           src={product.image}
@@ -42,15 +42,15 @@ function ProductDetails(){
           className="w-full md:w-1/2 h-64 object-contain rounded"
         />
         <div className="md:ml-8 mt-4 md:mt-0">
-          <h1 className="text-3xl text-yellow-700 font-bold">{product.title}</h1>
-          <p className="mt-2 text-yellow-700">€ {product.price}</p>
-          <p className="mt-4 text-yellow-700">{product.description}</p>
+          <h1 className="text-3xl text-yellow-500 font-bold">{product.title}</h1>
+          <p className="mt-2 text-yellow-500 text-[20px] font-semibold">€ {product.price}</p>
+          <p className="mt-4 text-yellow-500">{product.description}</p>
           <button onClick={(e) => {
             e.preventDefault();
             addToCart(product);
             alert(`${product.title} added to cart`)
           }}
-            className="mt-4 bg-yellow-700 text-white py-2 px-4 rounded hover:bg-yellow-600 cursor-pointer"
+            className="mt-4 bg-yellow-400 text-white py-2 px-4 rounded hover:bg-yellow-600 cursor-pointer"
           >
             <div className="flex flex-row justify-center items-center">
             <IoCart className="mr-2" /> Add to Cart

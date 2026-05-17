@@ -44,6 +44,7 @@ function App() {
             {/* product details page */}
             <Route path="/products/:id" element={<ProductDetails />} />
             <Route path="/sale" element={<Sale />} />
+            {/* <Route path="/wishlist" element={<Wishlist />} /> */}
             <Route path="/cart" element={<ShoppingCart />} />
             <Route path="/checkout/success" element={<CheckoutSuccess />} />
             <Route path="/checkout/cancel" element={<CheckoutCancel />} />

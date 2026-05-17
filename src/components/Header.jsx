@@ -52,10 +52,10 @@ function Header() {
         <Link to={"./Sale"} className="text-xl hover:scale-115">
           <RiDiscountPercentFill />
         </Link>
+        <Link to={"./Wishlist"} className="text-xl hover:scale-115">
+          <FaHeart />
+        </Link>
         <div className="flex items-center">
-          <button className="pr-2 text-xl hover:scale-115 cursor-pointer">
-            <FaHeart />
-          </button>
           <NavLink to="/cart" className="relative">
             <button className="text-yellow-400 p-1 text-xl hover:scale-115 cursor-pointer">
               <IoBagHandleSharp />

@@ -53,9 +53,9 @@ const ShoppingCart = () => {
   if (cartItems.length === 0) {
     return (
       <div className="container mx-auto p-4">
-        <h1 className="text-3xl text-yellow-700 font-bold mb-6 text-center py-4 mt-8">Shopping Cart</h1>
-        <p className='text-center text-amber-600 py-4 mt-4'>Your cart is empty.</p>
-        <Link to="/" className="text-yellow-500 hover:underline">
+        <h1 className="text-3xl text-yellow-400 font-bold mb-6 text-center py-4 mt-8">Shopping Cart</h1>
+        <p className='text-center text-yellow-500 py-4 mt-4'>Your cart looks so empty.</p>
+        <Link to="/" className="text-yellow-400 hover:text-yellow-500 font-semibold" >
         <p className='text-center py-4'>Continue shopping</p>
           
         </Link>
@@ -65,7 +65,7 @@ const ShoppingCart = () => {
 
   return (
     <div className="container mx-auto p-4">
-      <h1 className="text-xl text-yellow-700 font-bold mb-6">Shopping Cart</h1>
+      <h1 className="text-xl text-yellow-400 font-bold mb-6">Shopping Cart</h1>
       <div className="space-y-4">
         {cartItems.map((item) => (
           <div key={item.id} className="flex items-center p-4 rounded shadow">
