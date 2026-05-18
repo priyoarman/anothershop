@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import { useState } from "react";
 import "./index.css";
 import Header from "./components/Header";
@@ -9,9 +9,11 @@ import ShoppingCart from "./components/ShoppingCart";
 import CheckoutCancel from "./components/CheckoutCancel";
 import CheckoutSuccess from "./components/CheckoutSuccess";
 import Sale from "./components/Sale";
-import Chatbot from "./components/Chatbot";
+import Chatbot, { ChatPage } from "./components/Chatbot";
 
-function App() {
+function AppLayout() {
+  const location = useLocation();
+  const isChatPage = location.pathname === "/chat";
   // State for managing search and category filters
   const [searchInput, setSearchInput] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("");
@@ -19,8 +21,8 @@ function App() {
   const [cart, setCart] = useState([]);
 
   return (
-    <BrowserRouter>
-      <div className="min-h-screen flex flex-col">
+    <>
+      <div className="flex min-h-dvh w-full flex-col overflow-x-hidden">
         {/* Header Component with Cart Count */}
         <Header cartCount={cart.length} />
 
@@ -46,14 +48,23 @@ function App() {
             <Route path="/sale" element={<Sale />} />
             {/* <Route path="/wishlist" element={<Wishlist />} /> */}
             <Route path="/cart" element={<ShoppingCart />} />
+            <Route path="/chat" element={<ChatPage />} />
             <Route path="/checkout/success" element={<CheckoutSuccess />} />
             <Route path="/checkout/cancel" element={<CheckoutCancel />} />
           </Routes>
         </main>
 
-        <Footer />
+        {!isChatPage && <Footer />}
       </div>
       <Chatbot />
+    </>
+  );
+}
+
+function App() {
+  return (
+    <BrowserRouter>
+      <AppLayout />
     </BrowserRouter>
   );
 }

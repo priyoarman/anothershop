@@ -53,7 +53,7 @@ function HeroSlider() {
   };
 
   return (
-    <div className="relative w-full h-148 bg-yellow-200 overflow-hidden mb-6 group">
+    <div className="relative mb-4 h-dvh min-h-[28rem] w-full overflow-hidden bg-yellow-200 sm:mb-6 sm:h-148 group">
       {/* Slides Container */}
       <div className="relative w-full h-full">
         {slides.map((slide, index) => (
@@ -76,11 +76,11 @@ function HeroSlider() {
             {/* Overlay */}
             <div className="hero-slide-overlay absolute inset-0 bg-black/30 transition-colors duration-500"></div>
             {/* Text Content */}
-            <div className="hero-slide-text absolute inset-0 flex flex-col justify-center items-center text-center transition-colors duration-500">
-              <h2 className="text-4xl md:text-5xl font-bold text-white mb-4 drop-shadow-lg">
+            <div className="hero-slide-text absolute inset-0 flex flex-col items-center justify-center px-4 text-center transition-colors duration-500">
+              <h2 className="mb-3 text-3xl font-bold text-white drop-shadow-lg md:text-5xl">
                 {slide.title}
               </h2>
-              <p className="text-lg md:text-2xl text-gray-100 drop-shadow-md">
+              <p className="text-base text-gray-100 drop-shadow-md md:text-2xl">
                 {slide.subtitle}
               </p>
             </div>
@@ -91,7 +91,7 @@ function HeroSlider() {
       {/* Left Arrow Button */}
       <button
         onClick={prevSlide}
-        className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-white/50 hover:bg-white/80 p-2 rounded-full transition-all z-10 opacity-0 group-hover:opacity-100"
+        className="absolute left-3 top-1/2 z-10 -translate-y-1/2 rounded-full bg-white/50 p-2 opacity-100 transition-all hover:bg-white/80 sm:left-4 sm:opacity-0 sm:group-hover:opacity-100"
         aria-label="Previous slide"
       >
         <MdChevronLeft size={28} className="text-gray-800" />
@@ -100,14 +100,14 @@ function HeroSlider() {
       {/* Right Arrow Button */}
       <button
         onClick={nextSlide}
-        className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-white/50 hover:bg-white/80 p-2 rounded-full transition-all z-10 opacity-0 group-hover:opacity-100"
+        className="absolute right-3 top-1/2 z-10 -translate-y-1/2 rounded-full bg-white/50 p-2 opacity-100 transition-all hover:bg-white/80 sm:right-4 sm:opacity-0 sm:group-hover:opacity-100"
         aria-label="Next slide"
       >
         <MdChevronRight size={28} className="text-gray-800" />
       </button>
 
       {/* Dots Indicator */}
-      <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex gap-2 z-10">
+      <div className="absolute bottom-4 left-1/2 z-10 flex -translate-x-1/2 gap-2">
         {slides.map((_, index) => (
           <button
             key={index}

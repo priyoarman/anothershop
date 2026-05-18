@@ -1,11 +1,13 @@
 import { useState, useEffect, useRef } from "react";
 import { useChat } from "@ai-sdk/react";
 import { DefaultChatTransport } from "ai";
+import { useLocation, useNavigate } from "react-router-dom";
 import {
   IoChatbubbleEllipses,
   IoClose,
   IoSend,
   IoChevronDown,
+  IoArrowBack,
 } from "react-icons/io5";
 
 const INITIAL_MESSAGES = [
@@ -68,7 +70,7 @@ function getMessageText(message) {
 
 function useDarkMode() {
   const [isDarkMode, setIsDarkMode] = useState(() =>
-    document.body.classList.contains("bg-gray-950")
+    document.body.classList.contains("bg-gray-950"),
   );
 
   useEffect(() => {
@@ -83,6 +85,23 @@ function useDarkMode() {
   }, []);
 
   return isDarkMode;
+}
+
+function useIsMobile() {
+  const [isMobile, setIsMobile] = useState(
+    () => window.matchMedia("(max-width: 639px)").matches,
+  );
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia("(max-width: 639px)");
+    const handleChange = () => setIsMobile(mediaQuery.matches);
+
+    handleChange();
+    mediaQuery.addEventListener("change", handleChange);
+    return () => mediaQuery.removeEventListener("change", handleChange);
+  }, []);
+
+  return isMobile;
 }
 
 function ChatMessage({ message, isDarkMode }) {
@@ -108,9 +127,8 @@ function ChatMessage({ message, isDarkMode }) {
   );
 }
 
-function Chatbot() {
+function ChatPanel({ isPage = false, onClose }) {
   const isDarkMode = useDarkMode();
-  const [isOpen, setIsOpen] = useState(false);
   const [input, setInput] = useState("");
   const messagesEndRef = useRef(null);
   const inputRef = useRef(null);
@@ -128,10 +146,8 @@ function Chatbot() {
   }, [messages, isLoading]);
 
   useEffect(() => {
-    if (isOpen) {
-      inputRef.current?.focus();
-    }
-  }, [isOpen]);
+    inputRef.current?.focus();
+  }, []);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -163,120 +179,165 @@ function Chatbot() {
     ? "bg-slate-950/90 border-slate-700/80"
     : "bg-amber-50 border-slate-200";
 
-  return (
-    <div className="fixed bottom-5 right-5 z-[60] flex flex-col items-end gap-3">
-      {isOpen && (
-        <div
-          role="dialog"
-          aria-label="Shop assistant chat"
-          className={`flex w-[min(100vw-2.5rem,24rem)] flex-col overflow-hidden rounded-2xl border shadow-2xl shadow-black/20 transition-all duration-300 ${panelClasses}`}
-          style={{ height: "min(30rem, calc(100vh - 6rem))" }}
-        >
-          <header
-            className={`flex shrink-0 items-center justify-between border-b px-4 py-3 ${headerClasses}`}
-          >
-            <div className="flex items-center gap-2.5">
-              <span className="flex h-9 w-9 items-center justify-center rounded-full bg-orange-600 text-white">
-                <IoChatbubbleEllipses className="text-lg" />
-              </span>
-              <div>
-                <h3 className="font-semibold text-yellow-600">Shop Assistant</h3>
-                <p
-                  className={`text-xs ${isDarkMode ? "text-slate-400" : "text-slate-500"}`}
-                >
-                  {error ? "Connection issue" : isLoading ? "Typing…" : "Online"}
-                </p>
-              </div>
-            </div>
-            <button
-              type="button"
-              onClick={() => setIsOpen(false)}
-              className={`rounded-lg p-1.5 transition-colors hover:bg-black/10 ${
-                isDarkMode ? "text-slate-400 hover:text-slate-200" : "text-slate-500"
-              }`}
-              aria-label="Minimize chat"
-            >
-              <IoChevronDown className="text-xl" />
-            </button>
-          </header>
+  const panelSizeClasses = isPage
+    ? "h-[calc(100dvh-3.75rem)] w-full border-0 shadow-none sm:h-[calc(100dvh-4.25rem)]"
+    : "h-[min(30rem,calc(100vh-6rem))] w-[min(100vw-2.5rem,24rem)] rounded-2xl border shadow-2xl shadow-black/20";
 
+  return (
+    <div
+      role={isPage ? undefined : "dialog"}
+      aria-label="Shop assistant chat"
+      className={`flex overscroll-contain flex-col overflow-hidden transition-all duration-300 ${panelSizeClasses} ${panelClasses}`}
+    >
+      <header
+        className={`flex shrink-0 items-center justify-between border-b px-4 py-3 ${headerClasses}`}
+      >
+        <div className="flex min-w-0 items-center gap-2.5">
+          <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-orange-600 text-white">
+            <IoChatbubbleEllipses className="text-lg" />
+          </span>
+          <div className="min-w-0">
+            <h3 className="truncate font-semibold text-yellow-600">
+              Shop Assistant
+            </h3>
+            <p
+              className={`text-xs ${isDarkMode ? "text-slate-400" : "text-slate-500"}`}
+            >
+              {error ? "Connection issue" : isLoading ? "Typing..." : "Online"}
+            </p>
+          </div>
+        </div>
+        {onClose && (
+          <button
+            type="button"
+            onClick={onClose}
+            className={`rounded-lg p-1.5 transition-colors hover:bg-black/10 ${
+              isDarkMode
+                ? "text-slate-400 hover:text-slate-200"
+                : "text-slate-500"
+            }`}
+            aria-label={isPage ? "Back from chat" : "Minimize chat"}
+          >
+            {isPage ? (
+              <IoArrowBack className="text-xl" />
+            ) : (
+              <IoChevronDown className="text-xl" />
+            )}
+          </button>
+        )}
+      </header>
+
+      <div
+        className={`flex-1 space-y-3 overflow-y-auto px-4 py-4 ${
+          isDarkMode ? "bg-slate-900/50" : "bg-slate-50/80"
+        }`}
+      >
+        {error && (
           <div
-            className={`flex-1 space-y-3 overflow-y-auto px-4 py-4 ${
-              isDarkMode ? "bg-slate-900/50" : "bg-slate-50/80"
+            className={`rounded-xl border px-3 py-2 text-xs ${
+              isDarkMode
+                ? "border-red-900/50 bg-red-950/40 text-red-300"
+                : "border-red-200 bg-red-50 text-red-700"
             }`}
           >
-            {error && (
-              <div
-                className={`rounded-xl border px-3 py-2 text-xs ${
-                  isDarkMode
-                    ? "border-red-900/50 bg-red-950/40 text-red-300"
-                    : "border-red-200 bg-red-50 text-red-700"
-                }`}
-              >
-                {getFriendlyErrorMessage(error)}
-              </div>
-            )}
-
-            {messages.map((message) => (
-              <ChatMessage
-                key={message.id}
-                message={message}
-                isDarkMode={isDarkMode}
-              />
-            ))}
-
-            {status === "submitted" && (
-              <div className="flex justify-start">
-                <div
-                  className={`flex items-center gap-1 rounded-2xl rounded-bl-md px-4 py-3 ${
-                    isDarkMode ? "bg-slate-800" : "bg-slate-100"
-                  }`}
-                >
-                  <span className="h-2 w-2 animate-bounce rounded-full bg-orange-500 [animation-delay:0ms]" />
-                  <span className="h-2 w-2 animate-bounce rounded-full bg-orange-500 [animation-delay:150ms]" />
-                  <span className="h-2 w-2 animate-bounce rounded-full bg-orange-500 [animation-delay:300ms]" />
-                </div>
-              </div>
-            )}
-
-            <div ref={messagesEndRef} />
+            {getFriendlyErrorMessage(error)}
           </div>
+        )}
 
-          <form
-            onSubmit={handleSubmit}
-            className={`shrink-0 border-t p-3 ${isDarkMode ? "border-slate-700/80 bg-slate-950/50" : "border-slate-200 bg-white"}`}
-          >
-            <div className="flex items-end gap-2">
-              <textarea
-                ref={inputRef}
-                value={input}
-                onChange={(e) => setInput(e.target.value)}
-                onKeyDown={handleKeyDown}
-                placeholder="Type a message…"
-                rows={1}
-                className={`max-h-24 min-h-[2.5rem] flex-1 resize-none rounded-xl border px-3 py-2.5 text-sm outline-none transition-colors focus:ring-2 focus:ring-orange-500/40 ${
-                  isDarkMode
-                    ? "border-slate-700 bg-slate-800 text-slate-100 placeholder:text-slate-500"
-                    : "border-slate-200 bg-slate-50 text-slate-900 placeholder:text-slate-400"
-                }`}
-              />
-              <button
-                type="submit"
-                disabled={!input.trim() || !isReady}
-                className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-orange-600 text-white transition-colors hover:bg-orange-500 disabled:cursor-not-allowed disabled:opacity-40"
-                aria-label="Send message"
-              >
-                <IoSend className="text-lg" />
-              </button>
+        {messages.map((message) => (
+          <ChatMessage
+            key={message.id}
+            message={message}
+            isDarkMode={isDarkMode}
+          />
+        ))}
+
+        {status === "submitted" && (
+          <div className="flex justify-start">
+            <div
+              className={`flex items-center gap-1 rounded-2xl rounded-bl-md px-4 py-3 ${
+                isDarkMode ? "bg-slate-800" : "bg-slate-100"
+              }`}
+            >
+              <span className="h-2 w-2 animate-bounce rounded-full bg-orange-500 [animation-delay:0ms]" />
+              <span className="h-2 w-2 animate-bounce rounded-full bg-orange-500 [animation-delay:150ms]" />
+              <span className="h-2 w-2 animate-bounce rounded-full bg-orange-500 [animation-delay:300ms]" />
             </div>
-          </form>
+          </div>
+        )}
+
+        <div ref={messagesEndRef} />
+      </div>
+
+      <form
+        onSubmit={handleSubmit}
+        className={`shrink-0 border-t p-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] ${isDarkMode ? "border-slate-700/80 bg-slate-950/50" : "border-slate-200 bg-white"}`}
+      >
+        <div className="flex items-end gap-2">
+          <textarea
+            ref={inputRef}
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            onKeyDown={handleKeyDown}
+            placeholder="Type a message..."
+            rows={1}
+            className={`max-h-24 min-h-[2.5rem] flex-1 resize-none rounded-xl border px-3 py-2.5 text-sm outline-none transition-colors focus:ring-2 focus:ring-orange-500/40 ${
+              isDarkMode
+                ? "border-slate-700 bg-slate-800 text-slate-100 placeholder:text-slate-500"
+                : "border-slate-200 bg-slate-50 text-slate-900 placeholder:text-slate-400"
+            }`}
+          />
+          <button
+            type="submit"
+            disabled={!input.trim() || !isReady}
+            className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-orange-600 text-white transition-colors hover:bg-orange-500 disabled:cursor-not-allowed disabled:opacity-40"
+            aria-label="Send message"
+          >
+            <IoSend className="text-lg" />
+          </button>
         </div>
-      )}
+      </form>
+    </div>
+  );
+}
+
+export function ChatPage() {
+  const navigate = useNavigate();
+
+  return (
+    <section className="flex h-[calc(100dvh-3.75rem)] w-full">
+      <ChatPanel isPage onClose={() => navigate(-1)} />
+    </section>
+  );
+}
+
+function Chatbot() {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const isMobile = useIsMobile();
+  const [isOpen, setIsOpen] = useState(false);
+
+  if (location.pathname === "/chat") return null;
+
+  const handleToggle = () => {
+    if (isMobile) {
+      navigate("/chat");
+      return;
+    }
+
+    setIsOpen((prev) => !prev);
+  };
+
+  return (
+    <div className="fixed right-5 bottom-5 z-[9999] flex flex-col items-end gap-3">
+      {isOpen && <ChatPanel onClose={() => setIsOpen(false)} />}
 
       <button
         type="button"
-        onClick={() => setIsOpen((prev) => !prev)}
-        className={`group flex h-14 w-14 items-center justify-center rounded-full shadow-lg transition-all duration-300 hover:scale-105 active:scale-95 ${
+        onClick={handleToggle}
+        className={`group h-14 w-14 items-center justify-center rounded-full shadow-lg transition-all duration-300 hover:scale-105 active:scale-95 ${
+          isOpen ? "hidden sm:flex" : "flex"
+        } ${
           isOpen
             ? "bg-slate-700 text-white hover:bg-slate-600"
             : "bg-orange-600 text-white hover:bg-orange-500"

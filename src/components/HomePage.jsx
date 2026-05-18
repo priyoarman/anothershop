@@ -51,7 +51,7 @@ function HomePage({
   });
 
   return (
-    <main className="pb-6 min-h-screen auto-rows-fr">
+    <main className="min-h-dvh w-full overflow-x-hidden pb-6">
       {/* Hero Slider Section */}
       <HeroSlider />
 
@@ -64,7 +64,7 @@ function HomePage({
       />
 
       {/* Product Listings */}
-      <section className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-4 xl:grid-cols-4 gap-6 px-8">
+      <section className="grid w-full grid-cols-2 gap-3 px-3 sm:grid-cols-4 sm:gap-6 sm:px-8 lg:grid-cols-4 xl:grid-cols-4">
         {loading ? (
           <p className="text-center text-md font-semibold text-yellow-700 col-span-full animate-pulse">
             Loading products...
