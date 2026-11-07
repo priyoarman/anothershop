@@ -68,25 +68,6 @@ function getMessageText(message) {
   return message.content ?? "";
 }
 
-function useDarkMode() {
-  const [isDarkMode, setIsDarkMode] = useState(() =>
-    document.body.classList.contains("bg-gray-950"),
-  );
-
-  useEffect(() => {
-    const observer = new MutationObserver(() => {
-      setIsDarkMode(document.body.classList.contains("bg-gray-950"));
-    });
-    observer.observe(document.body, {
-      attributes: true,
-      attributeFilter: ["class"],
-    });
-    return () => observer.disconnect();
-  }, []);
-
-  return isDarkMode;
-}
-
 function useIsMobile() {
   const [isMobile, setIsMobile] = useState(
     () => window.matchMedia("(max-width: 639px)").matches,
@@ -104,7 +85,7 @@ function useIsMobile() {
   return isMobile;
 }
 
-function ChatMessage({ message, isDarkMode }) {
+function ChatMessage({ message }) {
   const isUser = message.role === "user";
   const text = getMessageText(message);
 
@@ -113,13 +94,7 @@ function ChatMessage({ message, isDarkMode }) {
   return (
     <div className={`flex ${isUser ? "justify-end" : "justify-start"}`}>
       <div
-        className={`max-w-[85%] rounded-2xl px-3.5 py-2.5 text-sm leading-relaxed whitespace-pre-wrap ${
-          isUser
-            ? "rounded-br-md bg-orange-600 text-white"
-            : isDarkMode
-              ? "rounded-bl-md bg-slate-800 text-slate-100"
-              : "rounded-bl-md bg-slate-100 text-slate-800"
-        }`}
+        className={`chat-bubble ${isUser ? "chat-bubble-user" : "chat-bubble-bot"}`}
       >
         {text}
       </div>
@@ -128,7 +103,6 @@ function ChatMessage({ message, isDarkMode }) {
 }
 
 function ChatPanel({ isPage = false, onClose }) {
-  const isDarkMode = useDarkMode();
   const [input, setInput] = useState("");
   const messagesEndRef = useRef(null);
   const inputRef = useRef(null);
@@ -171,38 +145,24 @@ function ChatPanel({ isPage = false, onClose }) {
     }
   };
 
-  const panelClasses = isDarkMode
-    ? "bg-slate-900 border-slate-700/80 text-slate-100"
-    : "bg-white border-slate-200 text-slate-900";
-
-  const headerClasses = isDarkMode
-    ? "bg-slate-950/90 border-slate-700/80"
-    : "bg-amber-50 border-slate-200";
-
   const panelSizeClasses = isPage
     ? "h-[calc(100dvh-3.75rem)] w-full border-0 shadow-none sm:h-[calc(100dvh-4.25rem)]"
-    : "h-[min(30rem,calc(100vh-6rem))] w-[min(100vw-2.5rem,24rem)] rounded-2xl border shadow-2xl shadow-black/20";
+    : "chat-panel-floating h-[min(28rem,calc(100vh-7rem))] w-[min(100vw-2.5rem,24rem)] rounded-[5px] border";
 
   return (
     <div
       role={isPage ? undefined : "dialog"}
       aria-label="Shop assistant chat"
-      className={`flex overscroll-contain flex-col overflow-hidden transition-all duration-300 ${panelSizeClasses} ${panelClasses}`}
+      className={`chat-panel flex overscroll-contain flex-col overflow-hidden transition-all duration-300 ${panelSizeClasses}`}
     >
-      <header
-        className={`flex shrink-0 items-center justify-between border-b px-4 py-3 ${headerClasses}`}
-      >
+      <header className="chat-header flex shrink-0 items-center justify-between border-b px-4 py-3">
         <div className="flex min-w-0 items-center gap-2.5">
-          <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-orange-600 text-white">
+          <span className="chat-avatar flex h-9 w-9 shrink-0 items-center justify-center rounded-full">
             <IoChatbubbleEllipses className="text-lg" />
           </span>
           <div className="min-w-0">
-            <h3 className="truncate font-semibold text-yellow-600">
-              Shop Assistant
-            </h3>
-            <p
-              className={`text-xs ${isDarkMode ? "text-slate-400" : "text-slate-500"}`}
-            >
+            <h3 className="chat-title truncate">AnotherShop Assistant</h3>
+            <p className="chat-status">
               {error ? "Connection issue" : isLoading ? "Typing..." : "Online"}
             </p>
           </div>
@@ -211,11 +171,7 @@ function ChatPanel({ isPage = false, onClose }) {
           <button
             type="button"
             onClick={onClose}
-            className={`rounded-lg p-1.5 transition-colors hover:bg-black/10 ${
-              isDarkMode
-                ? "text-slate-400 hover:text-slate-200"
-                : "text-slate-500"
-            }`}
+            className="chat-icon-button rounded-full p-1.5"
             aria-label={isPage ? "Back from chat" : "Minimize chat"}
           >
             {isPage ? (
@@ -227,41 +183,21 @@ function ChatPanel({ isPage = false, onClose }) {
         )}
       </header>
 
-      <div
-        className={`flex-1 space-y-3 overflow-y-auto px-4 py-4 ${
-          isDarkMode ? "bg-slate-900/50" : "bg-slate-50/80"
-        }`}
-      >
+      <div className="chat-messages flex-1 space-y-3 overflow-y-auto px-4 py-4">
         {error && (
-          <div
-            className={`rounded-xl border px-3 py-2 text-xs ${
-              isDarkMode
-                ? "border-red-900/50 bg-red-950/40 text-red-300"
-                : "border-red-200 bg-red-50 text-red-700"
-            }`}
-          >
-            {getFriendlyErrorMessage(error)}
-          </div>
+          <div className="chat-error">{getFriendlyErrorMessage(error)}</div>
         )}
 
         {messages.map((message) => (
-          <ChatMessage
-            key={message.id}
-            message={message}
-            isDarkMode={isDarkMode}
-          />
+          <ChatMessage key={message.id} message={message} />
         ))}
 
         {status === "submitted" && (
           <div className="flex justify-start">
-            <div
-              className={`flex items-center gap-1 rounded-2xl rounded-bl-md px-4 py-3 ${
-                isDarkMode ? "bg-slate-800" : "bg-slate-100"
-              }`}
-            >
-              <span className="h-2 w-2 animate-bounce rounded-full bg-orange-500 [animation-delay:0ms]" />
-              <span className="h-2 w-2 animate-bounce rounded-full bg-orange-500 [animation-delay:150ms]" />
-              <span className="h-2 w-2 animate-bounce rounded-full bg-orange-500 [animation-delay:300ms]" />
+            <div className="chat-bubble chat-bubble-bot flex items-center gap-1 px-4 py-3">
+              <span className="chat-dot h-2 w-2 animate-bounce rounded-full [animation-delay:0ms]" />
+              <span className="chat-dot h-2 w-2 animate-bounce rounded-full [animation-delay:150ms]" />
+              <span className="chat-dot h-2 w-2 animate-bounce rounded-full [animation-delay:300ms]" />
             </div>
           </div>
         )}
@@ -271,7 +207,7 @@ function ChatPanel({ isPage = false, onClose }) {
 
       <form
         onSubmit={handleSubmit}
-        className={`shrink-0 border-t p-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] ${isDarkMode ? "border-slate-700/80 bg-slate-950/50" : "border-slate-200 bg-white"}`}
+        className="chat-form shrink-0 border-t p-3 pb-[max(0.75rem,env(safe-area-inset-bottom))]"
       >
         <div className="flex items-end gap-2">
           <textarea
@@ -281,16 +217,12 @@ function ChatPanel({ isPage = false, onClose }) {
             onKeyDown={handleKeyDown}
             placeholder="Type a message..."
             rows={1}
-            className={`max-h-24 min-h-[2.5rem] flex-1 resize-none rounded-xl border px-3 py-2.5 text-sm outline-none transition-colors focus:ring-2 focus:ring-orange-500/40 ${
-              isDarkMode
-                ? "border-slate-700 bg-slate-800 text-slate-100 placeholder:text-slate-500"
-                : "border-slate-200 bg-slate-50 text-slate-900 placeholder:text-slate-400"
-            }`}
+            className="chat-input max-h-24 min-h-[2.5rem] flex-1 resize-none px-3 py-2.5 text-sm"
           />
           <button
             type="submit"
             disabled={!input.trim() || !isReady}
-            className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-orange-600 text-white transition-colors hover:bg-orange-500 disabled:cursor-not-allowed disabled:opacity-40"
+            className="chat-send flex h-10 w-10 shrink-0 items-center justify-center"
             aria-label="Send message"
           >
             <IoSend className="text-lg" />
@@ -335,12 +267,8 @@ function Chatbot() {
       <button
         type="button"
         onClick={handleToggle}
-        className={`group h-14 w-14 items-center justify-center rounded-full shadow-lg transition-all duration-300 hover:scale-105 active:scale-95 ${
+        className={`chat-launcher group h-14 w-14 items-center justify-center rounded-full transition-all duration-300 hover:scale-105 active:scale-95 ${
           isOpen ? "hidden sm:flex" : "flex"
-        } ${
-          isOpen
-            ? "bg-slate-700 text-white hover:bg-slate-600"
-            : "bg-orange-600 text-white hover:bg-orange-500"
         }`}
         aria-label={isOpen ? "Close chat" : "Open chat"}
         aria-expanded={isOpen}
