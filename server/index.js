@@ -29,7 +29,7 @@ function getModel() {
     return { model: google(modelName), label: `Gemini (${modelName})` };
   }
 
-  const groqModel = process.env.GROQ_MODEL || "llama-3.3-70b-versatile";
+  const groqModel = process.env.GROQ_MODEL || "openai/gpt-oss-120b";
   return { model: groq(groqModel), label: `Groq (${groqModel})` };
 }
 
