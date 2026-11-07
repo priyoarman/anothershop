@@ -18,13 +18,16 @@ function AppLayout() {
   const [searchInput, setSearchInput] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("");
   // State for the cart
-  const [cart, setCart] = useState([]);
+  const [, setCart] = useState([]);
 
   return (
     <>
       <div className="flex min-h-dvh w-full flex-col overflow-x-hidden">
         {/* Header Component with Cart Count */}
-        <Header cartCount={cart.length} />
+        <Header
+          selectedCategory={selectedCategory}
+          setSelectedCategory={setSelectedCategory}
+        />
 
         <main className="flex-1">
           {/* define app routes */}

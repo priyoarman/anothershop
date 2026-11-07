@@ -5,7 +5,16 @@ import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import { useCart } from "../context/CartContext";
 import { FiMenu, FiSearch, FiShoppingBag, FiUser, FiX } from "react-icons/fi";
 
-function Header() {
+// Store departments shown in the header. Each one filters the shop grid by category.
+const DEPARTMENTS = [
+  { label: "Women", category: "women's clothing" },
+  { label: "Men", category: "men's clothing" },
+  { label: "Electronics", category: "electronics" },
+  { label: "Home & Kitchen", category: "home & kitchen" },
+  { label: "Beauty", category: "beauty" },
+];
+
+function Header({ selectedCategory, setSelectedCategory }) {
   const { cartItems } = useCart();
   const cartCount = cartItems.reduce((acc, item) => acc + item.quantity, 0);
 
@@ -24,6 +33,18 @@ function Header() {
     e.preventDefault();
     if (location.key !== "default") navigate(-1);
     else navigate("/");
+  };
+
+  // Open the shop grid filtered to a department, from any page.
+  const handleDepartmentClick = (e, category) => {
+    e.preventDefault();
+    setSelectedCategory(category);
+    setMenuOpen(false);
+    navigate("/");
+    // Wait a tick so the home page has rendered before scrolling to the grid.
+    setTimeout(() => {
+      document.getElementById("shop")?.scrollIntoView({ behavior: "smooth" });
+    }, 0);
   };
 
   useEffect(() => {
@@ -45,12 +66,20 @@ function Header() {
           Another<span>Shop</span>
         </NavLink>
         <nav className={`main-nav ${menuOpen ? "is-open" : ""}`}>
-          <NavLink to="/" end>
-            Home
-          </NavLink>
-          <a href="#shop">Shop</a>
-          <Link to="/sale">Collections</Link>
-          <a href="#about">About us</a>
+          {DEPARTMENTS.map(({ label, category }) => (
+            <Link
+              key={category}
+              to="/"
+              onClick={(e) => handleDepartmentClick(e, category)}
+              className={
+                location.pathname === "/" && selectedCategory === category
+                  ? "active"
+                  : undefined
+              }
+            >
+              {label}
+            </Link>
+          ))}
         </nav>
         <div className="header-actions">
           <button className="icon-button" aria-label="Search">
