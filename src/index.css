@@ -112,8 +112,12 @@ body[data-theme="dark"] {
   cursor: pointer;
 }
 .theme-toggle {
+  display: grid;
+  place-items: center;
+  height: 34px;
   padding-left: 20px;
   border-left: 1px solid var(--line);
+  font-size: 1.1rem;
   cursor: pointer;
 }
 .cart-count {
@@ -1127,9 +1131,11 @@ body[data-theme="dark"] .cart-error {
   .mobile-menu {
     display: grid;
   }
-  .desktop-only,
-  .theme-toggle {
+  .desktop-only {
     display: none;
+  }
+  .theme-toggle {
+    padding-left: 12px;
   }
   .header-inner {
     gap: 10px;

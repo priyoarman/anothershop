@@ -3,7 +3,15 @@
 import { useState, useEffect } from "react";
 import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import { useCart } from "../context/CartContext";
-import { FiMenu, FiSearch, FiShoppingBag, FiUser, FiX } from "react-icons/fi";
+import {
+  FiMenu,
+  FiMoon,
+  FiSearch,
+  FiShoppingBag,
+  FiSun,
+  FiUser,
+  FiX,
+} from "react-icons/fi";
 
 // Store departments shown in the header. Each one filters the shop grid by category.
 const DEPARTMENTS = [
@@ -103,7 +111,7 @@ function Header({ selectedCategory, setSelectedCategory }) {
         </nav>
         <div className="header-actions">
           <button
-            className="icon-button"
+            className="icon-button desktop-only"
             aria-label="Search products"
             onClick={handleSearchClick}
           >
@@ -127,10 +135,13 @@ function Header({ selectedCategory, setSelectedCategory }) {
           </Link>
           <button
             className="theme-toggle"
-            aria-label="Toggle light/dark theme"
+            aria-label={
+              theme === "light" ? "Switch to dark theme" : "Switch to light theme"
+            }
+            title={theme === "light" ? "Dark theme" : "Light theme"}
             onClick={() => setTheme(theme === "light" ? "dark" : "light")}
           >
-            {theme === "light" ? "Night" : "Day"}
+            {theme === "light" ? <FiMoon /> : <FiSun />}
           </button>
         </div>
       </div>
