@@ -1,7 +1,7 @@
 /** This component renders the header for each page on the app. */
 
 import { useState, useEffect } from "react";
-import { Link, NavLink } from "react-router-dom";
+import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import { useCart } from "../context/CartContext";
 import { FiMenu, FiSearch, FiShoppingBag, FiUser, FiX } from "react-icons/fi";
 
@@ -13,6 +13,18 @@ function Header() {
     () => localStorage.getItem("theme") || "light",
   );
   const [menuOpen, setMenuOpen] = useState(false);
+  const location = useLocation();
+  const navigate = useNavigate();
+  const onCartPage = location.pathname === "/cart";
+
+  // On the cart page, the cart icon acts as a toggle back to where the user came from.
+  // "default" key means /cart was the first page loaded, so there is no in-app page to return to.
+  const handleCartClick = (e) => {
+    if (!onCartPage) return;
+    e.preventDefault();
+    if (location.key !== "default") navigate(-1);
+    else navigate("/");
+  };
 
   useEffect(() => {
     localStorage.setItem("theme", theme);
@@ -46,8 +58,9 @@ function Header() {
           </button>
           <Link
             to="/cart"
-            className="icon-button cart-button"
-            aria-label="Shopping cart"
+            onClick={handleCartClick}
+            className={`icon-button cart-button${onCartPage ? " is-active" : ""}`}
+            aria-label={onCartPage ? "Close cart" : "Shopping cart"}
           >
             <FiShoppingBag />
             {cartCount > 0 && <span className="cart-count">{cartCount}</span>}
