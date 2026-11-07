@@ -1,9 +1,10 @@
 /** This component renders the product details for each products on the app. */
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { useCart } from "../context/CartContext";
 import ProductCard from "./ProductCard";
+import products from "../../lib/products.js";
 import {
   FiShoppingBag,
   FiCheck,
@@ -41,43 +42,26 @@ const perks = [
 function ProductDetails() {
   const { id } = useParams();
   const { cartItems, addToCart, updateQuantity } = useCart();
-  const [product, setProduct] = useState(null);
-  const [related, setRelated] = useState([]);
-  const [loading, setLoading] = useState(true);
   const [quantity, setQuantity] = useState(1);
   const [added, setAdded] = useState(false);
 
+  const product = useMemo(
+    () => products.find((p) => p.id === Number(id)) ?? null,
+    [id]
+  );
+
+  // Same-category items first, then fill the row with others.
+  const related = useMemo(() => {
+    if (!product) return [];
+    const others = products.filter((p) => p.id !== product.id);
+    const sameCategory = others.filter((p) => p.category === product.category);
+    const rest = others.filter((p) => p.category !== product.category);
+    return [...sameCategory, ...rest].slice(0, 4);
+  }, [product]);
+
   useEffect(() => {
-    let cancelled = false;
-    setLoading(true);
     setQuantity(1);
     window.scrollTo(0, 0);
-
-    fetch(`https://fakestoreapi.com/products/${id}`)
-      .then((res) => res.json())
-      .then((data) => {
-        if (cancelled) return;
-        setProduct(data);
-        setLoading(false);
-        return fetch("https://fakestoreapi.com/products")
-          .then((res) => res.json())
-          .then((items) => {
-            if (cancelled) return;
-            // Same-category items first, then fill the row with others.
-            const others = items.filter((p) => p.id !== data.id);
-            const sameCategory = others.filter((p) => p.category === data.category);
-            const rest = others.filter((p) => p.category !== data.category);
-            setRelated([...sameCategory, ...rest].slice(0, 4));
-          });
-      })
-      .catch((err) => {
-        console.error("Error fetching product details:", err);
-        if (!cancelled) setLoading(false);
-      });
-
-    return () => {
-      cancelled = true;
-    };
   }, [id]);
 
   useEffect(() => {
@@ -92,14 +76,6 @@ function ProductDetails() {
     updateQuantity(product.id, (existing?.quantity ?? 0) + quantity);
     setAdded(true);
   };
-
-  if (loading) {
-    return (
-      <section className="shop-section">
-        <p className="empty-state">Loading product details...</p>
-      </section>
-    );
-  }
 
   if (!product) {
     return (

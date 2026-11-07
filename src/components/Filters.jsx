@@ -1,5 +1,12 @@
 /** This component renders the search bar and category dropdown for filtering products. */
 
+import products from "../../lib/products.js";
+
+const categories = [...new Set(products.map((p) => p.category))].sort();
+
+const toLabel = (category) =>
+  category.replace(/(^|\s)\S/g, (c) => c.toUpperCase());
+
 function Filters({
   searchInput,
   setSearchInput,
@@ -22,10 +29,11 @@ function Filters({
         className="category-select"
       >
         <option value="">All Categories</option>
-        <option value="electronics">Electronics</option>
-        <option value="jewelery">Jewelery</option>
-        <option value="men's clothing">Men's Clothing</option>
-        <option value="women's clothing">Women's Clothing</option>
+        {categories.map((category) => (
+          <option key={category} value={category}>
+            {toLabel(category)}
+          </option>
+        ))}
       </select>
     </div>
   );

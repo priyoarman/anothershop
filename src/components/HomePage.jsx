@@ -1,9 +1,9 @@
 /** This component renders the main page (HomePage) for the app. */
 
-import { useState, useEffect } from "react";
 import ProductCard from "./ProductCard";
 import Filters from "./Filters";
 import HeroSlider from "./HeroSlider";
+import products from "../../lib/products.js";
 
 function HomePage({
   searchInput,
@@ -12,27 +12,6 @@ function HomePage({
   setSelectedCategory,
   setCart,
 }) {
-  // State for storing products
-  const [products, setProducts] = useState([]);
-  const [loading, setLoading] = useState(true);
-
-  // Fetch products from the Fake Store API
-  useEffect(() => {
-    async function fetchProducts() {
-      try {
-        const response = await fetch("https://fakestoreapi.com/products");
-        const data = await response.json();
-        setProducts(data);
-        setLoading(false);
-      } catch (error) {
-        console.error("Error fetching products:", error);
-        setLoading(false);
-      }
-    }
-
-    fetchProducts();
-  }, []); // Empty dependency array to ensure the fetch runs once
-
   // Function to add a product to the cart
   const handleAddToCart = (product) => {
     setCart((prevCart) => [...prevCart, product]);
@@ -72,8 +51,8 @@ function HomePage({
         />
       </section>
       <section className="shop-section product-grid">
-        {loading ? (
-          <p className="empty-state">Loading products...</p>
+        {filteredProducts.length === 0 ? (
+          <p className="empty-state">No products match your search.</p>
         ) : (
           filteredProducts.map((product) => (
             <ProductCard
