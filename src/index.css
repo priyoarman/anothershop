@@ -1011,11 +1011,60 @@ body[data-theme="dark"] .cart-error {
 
 .site-footer {
   width: min(1180px, calc(100% - 48px));
-  margin: 80px auto 0;
-  padding: 24px 0 30px;
+  margin: 36px auto 0;
+  padding: 28px 0 28px;
   border-top: 1px solid var(--line);
   color: var(--muted);
-  font-size: 0.75rem;
+  font-size: 0.95rem;
+  line-height: 1.6;
+  text-align: center;
+}
+
+.site-footer p {
+  margin: 0;
+}
+
+.site-footer a {
+  color: var(--ink);
+  font-weight: 500;
+  text-decoration: none;
+}
+
+.site-footer a:hover {
+  color: var(--accent);
+}
+
+.footer-meta {
+  margin-top: 10px !important;
+}
+
+.footer-label {
+  margin-top: 16px !important;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.footer-stack {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px 44px;
+  margin: 14px 0 0;
+  padding: 0;
+  list-style: none;
+  font-family: var(--font-heading);
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: color-mix(in srgb, var(--muted) 75%, transparent);
+}
+
+@media (max-width: 600px) {
+  .footer-stack {
+    gap: 8px 24px;
+    font-size: 1.2rem;
+  }
 }
 
 @media (max-width: 800px) {
