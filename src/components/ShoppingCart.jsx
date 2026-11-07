@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useCart } from "../context/CartContext";
+import { loadProfile } from "../profile";
 import {
   FiArrowLeft,
   FiChevronRight,
@@ -52,6 +53,8 @@ const ShoppingCart = () => {
             id: item.id,
             quantity: item.quantity,
           })),
+          // Pre-fills the email on Stripe's page if the shopper saved one in their account.
+          customerEmail: loadProfile().email || undefined,
         }),
       });
 

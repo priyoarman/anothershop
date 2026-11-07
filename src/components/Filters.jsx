@@ -21,6 +21,8 @@ function Filters({
         value={searchInput}
         onChange={(e) => setSearchInput(e.target.value)}
         className="search-input"
+        id="product-search"
+        aria-label="Search products"
       />
 
       <select

@@ -35,6 +35,19 @@ function Header({ selectedCategory, setSelectedCategory }) {
     else navigate("/");
   };
 
+  // Jump to the search box above the product grid, from any page.
+  const handleSearchClick = () => {
+    setMenuOpen(false);
+    if (location.pathname !== "/") navigate("/");
+    // Wait a tick so the home page has rendered before scrolling.
+    setTimeout(() => {
+      const input = document.getElementById("product-search");
+      if (!input) return;
+      input.scrollIntoView({ behavior: "smooth", block: "center" });
+      input.focus({ preventScroll: true });
+    }, 0);
+  };
+
   // Open the shop grid filtered to a department, from any page.
   const handleDepartmentClick = (e, category) => {
     e.preventDefault();
@@ -80,9 +93,20 @@ function Header({ selectedCategory, setSelectedCategory }) {
               {label}
             </Link>
           ))}
+          <Link
+            to="/account"
+            className={`nav-account${location.pathname === "/account" ? " active" : ""}`}
+            onClick={() => setMenuOpen(false)}
+          >
+            Account
+          </Link>
         </nav>
         <div className="header-actions">
-          <button className="icon-button" aria-label="Search">
+          <button
+            className="icon-button"
+            aria-label="Search products"
+            onClick={handleSearchClick}
+          >
             <FiSearch />
           </button>
           <Link
@@ -95,8 +119,8 @@ function Header({ selectedCategory, setSelectedCategory }) {
             {cartCount > 0 && <span className="cart-count">{cartCount}</span>}
           </Link>
           <Link
-            to="/chat"
-            className="icon-button desktop-only"
+            to="/account"
+            className={`icon-button desktop-only${location.pathname === "/account" ? " is-active" : ""}`}
             aria-label="Account"
           >
             <FiUser />

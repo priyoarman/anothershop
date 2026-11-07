@@ -109,6 +109,7 @@ body[data-theme="dark"] {
   height: 34px;
   color: var(--ink);
   font-size: 1.1rem;
+  cursor: pointer;
 }
 .theme-toggle {
   padding-left: 20px;
@@ -1241,8 +1242,9 @@ body[data-theme="dark"] .cart-error {
   }
 }
 
-/* Cart icon while on the cart page (clicking it returns to the previous page). */
-.cart-button.is-active {
+/* Cart icon while on the cart page (clicking it returns to the previous page),
+   and the account icon while on the account page. */
+.icon-button.is-active {
   color: var(--accent);
 }
 
@@ -1368,4 +1370,111 @@ body[data-theme="dark"] .chat-error {
 .chat-launcher[aria-expanded="true"] {
   background: var(--surface-deep);
   color: var(--ink);
+}
+
+/* ---------- Account ---------- */
+/* The Account text link only shows in the mobile menu; desktop has the icon. */
+.main-nav .nav-account {
+  display: none;
+}
+@media (max-width: 800px) {
+  .main-nav .nav-account {
+    display: block;
+  }
+}
+.account-form h2,
+.account-links h2 {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0 0 20px;
+  color: var(--ink);
+  font-family: var(--font-heading);
+  font-size: 1.15rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+.account-fields {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+.account-field {
+  display: grid;
+  gap: 6px;
+  color: var(--muted);
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.account-field.is-wide {
+  grid-column: 1 / -1;
+}
+.account-field .search-input {
+  width: 100%;
+  letter-spacing: normal;
+  text-transform: none;
+}
+.account-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 16px 24px;
+  margin-top: 24px;
+}
+.account-actions .details-button {
+  flex: 0 0 auto;
+}
+.account-clear {
+  color: var(--muted);
+  font-size: 0.76rem;
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+.account-clear:hover {
+  color: var(--ink);
+}
+.account-status {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 1.4em;
+  margin: 14px 0 0;
+  color: var(--accent);
+  font-size: 0.78rem;
+  font-weight: 600;
+}
+.account-links a {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 0;
+  border-top: 1px solid var(--line);
+  color: var(--ink);
+  font-size: 0.84rem;
+  font-weight: 600;
+  transition: color 180ms ease;
+}
+.account-links a:hover {
+  color: var(--accent);
+}
+.account-links a span {
+  display: grid;
+  flex: 1;
+}
+.account-links small {
+  color: var(--muted);
+  font-size: 0.72rem;
+  font-weight: 500;
+}
+@media (max-width: 600px) {
+  .account-fields {
+    grid-template-columns: 1fr;
+  }
+  .account-actions .details-button {
+    flex: 1 1 100%;
+  }
 }

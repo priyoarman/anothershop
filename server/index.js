@@ -88,6 +88,14 @@ async function readJsonBody(req) {
   return body ? JSON.parse(body) : {};
 }
 
+function isValidEmail(value) {
+  return (
+    typeof value === "string" &&
+    value.length <= 254 &&
+    /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)
+  );
+}
+
 function validateCheckoutItems(items) {
   if (!Array.isArray(items) || items.length === 0) {
     return { error: "Checkout requires at least one cart item." };
@@ -125,7 +133,7 @@ function validateCheckoutItems(items) {
 
 async function handleCreateCheckoutSession(req, res) {
   try {
-    const { items } = await readJsonBody(req);
+    const { items, customerEmail } = await readJsonBody(req);
     const { validatedItems, error } = validateCheckoutItems(items);
 
     if (error) {
@@ -149,6 +157,7 @@ async function handleCreateCheckoutSession(req, res) {
       })),
       success_url: `${appUrl}/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${appUrl}/checkout/cancel`,
+      ...(isValidEmail(customerEmail) && { customer_email: customerEmail }),
       metadata: {
         productIds: validatedItems.map((item) => item.id).join(","),
       },

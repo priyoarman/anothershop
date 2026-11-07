@@ -9,6 +9,7 @@ import ShoppingCart from "./components/ShoppingCart";
 import CheckoutCancel from "./components/CheckoutCancel";
 import CheckoutSuccess from "./components/CheckoutSuccess";
 import Sale from "./components/Sale";
+import Account from "./components/Account";
 import Chatbot, { ChatPage } from "./components/Chatbot";
 
 function AppLayout() {
@@ -51,6 +52,7 @@ function AppLayout() {
             <Route path="/sale" element={<Sale />} />
             {/* <Route path="/wishlist" element={<Wishlist />} /> */}
             <Route path="/cart" element={<ShoppingCart />} />
+            <Route path="/account" element={<Account />} />
             <Route path="/chat" element={<ChatPage />} />
             <Route path="/checkout/success" element={<CheckoutSuccess />} />
             <Route path="/checkout/cancel" element={<CheckoutCancel />} />
