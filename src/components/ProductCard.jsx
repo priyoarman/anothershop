@@ -2,49 +2,43 @@
 
 import { Link } from "react-router-dom";
 import { useCart } from "../context/CartContext";
-import { IoCart } from "react-icons/io5";
+import { FiArrowUpRight, FiShoppingBag } from "react-icons/fi";
 
 function ProductCard({ product }) {
   const { addToCart } = useCart();
 
   return (
-    <Link to={`/products/${product.id}`}>
-      <div className="product-card group flex aspect-[3/4] w-full flex-col overflow-hidden rounded-lg border border-transparent bg-slate-50 shadow-md transition-colors duration-500 hover:shadow-lg">
-        {/* Product Image */}
-        <div className="relative h-52 w-full overflow-hidden bg-slate-100 flex-shrink-0">
+    <Link to={`/products/${product.id}`} className="product-card-link">
+      <div className="product-card group">
+        <div className="product-image-wrap">
           <img
             src={product.image}
             alt={product.title}
-            className="h-full w-full min-h-full min-w-full object-cover object-top transition-transform duration-300 group-hover:scale-105"
+            className="product-image"
           />
-        </div>
-
-        <div className="flex flex-1 flex-col p-4">
-          <div className="min-h-[5rem]">
-            {/* Product Title */}
-            <h3 className="text-lg font-semibold text-yellow-600 transition-colors duration-300 product-card-title">
-              {product.title}
-            </h3>
-          </div>
-        </div>
-
-        <div className="mt-auto grid w-full grid-cols-2">
-          <div className="flex h-10 items-center justify-center bg-gray-800 text-[16px] font-semibold text-yellow-400 shadow-sm transition-colors duration-500 product-card-price">
-            €{product.price}
-          </div>
           <button
             onClick={(e) => {
               e.preventDefault();
               addToCart(product);
-              alert(`${product.title} added to Cart`);
             }}
-            className="flex h-10 items-center justify-center border border-yellow-500 bg-yellow-500 text-sm font-semibold text-white transition-colors duration-300 hover:bg-yellow-600 cursor-pointer"
+            className="add-button"
+            aria-label={`Add ${product.title} to cart`}
           >
-            <div className="flex items-center gap-1 text-white text-[16px] font-bold">
-              <IoCart />
-              Add to Cart
-            </div>
+            <FiShoppingBag />
           </button>
+        </div>
+
+        <div className="product-info">
+          <p className="product-category">{product.category}</p>
+          <h3 className="product-card-title" title={product.title}>
+            {product.title}
+          </h3>
+          <div className="product-bottom">
+            <span className="product-card-price">€{product.price}</span>
+            <span className="product-action">
+              <FiArrowUpRight />
+            </span>
+          </div>
         </div>
       </div>
     </Link>

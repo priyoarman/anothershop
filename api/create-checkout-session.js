@@ -1,7 +1,7 @@
 import Stripe from "stripe";
 import { getCheckoutProduct, getPriceCents } from "../lib/checkoutCatalog.js";
 
-const CURRENCY = "eur";
+const CURRENCY = "dkk";
 
 function sendJson(res, statusCode, data) {
   res.status(statusCode).json(data);
@@ -11,7 +11,9 @@ function getStripe() {
   const secretKey = process.env.STRIPE_SECRET_KEY?.trim();
 
   if (!secretKey) {
-    throw new Error("Missing STRIPE_SECRET_KEY in Vercel environment variables.");
+    throw new Error(
+      "Missing STRIPE_SECRET_KEY in Vercel environment variables.",
+    );
   }
 
   if (
@@ -19,7 +21,7 @@ function getStripe() {
     process.env.STRIPE_ALLOW_LIVE_PAYMENTS !== "true"
   ) {
     throw new Error(
-      "Live Stripe key detected. Set STRIPE_ALLOW_LIVE_PAYMENTS=true to enable live checkout sessions."
+      "Live Stripe key detected. Set STRIPE_ALLOW_LIVE_PAYMENTS=true to enable live checkout sessions.",
     );
   }
 
@@ -107,7 +109,7 @@ export default async function handler(req, res) {
       line_items: validatedItems.map((item) => ({
         quantity: item.quantity,
         price_data: {
-          currency: CURRENCY,
+          currency: "dkk",
           unit_amount: item.unitAmount,
           product_data: {
             name: item.title,

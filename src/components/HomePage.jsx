@@ -52,23 +52,28 @@ function HomePage({
 
   return (
     <main className="min-h-dvh w-full overflow-x-hidden pb-6">
-      {/* Hero Slider Section */}
       <HeroSlider />
-
-      {/* Filters Section */}
-      <Filters
-        searchInput={searchInput}
-        setSearchInput={setSearchInput}
-        selectedCategory={selectedCategory}
-        setSelectedCategory={setSelectedCategory}
-      />
-
-      {/* Product Listings */}
-      <section className="grid w-full grid-cols-2 gap-3 px-3 sm:grid-cols-4 sm:gap-6 sm:px-8 lg:grid-cols-4 xl:grid-cols-4">
-        {loading ? (
-          <p className="text-center text-md font-semibold text-yellow-700 col-span-full animate-pulse">
-            Loading products...
+      <section className="shop-section" id="shop">
+        <div className="section-heading">
+          <div>
+            <p className="hero-eyebrow">Curated for your home</p>
+            <h1>Find your new favorite piece</h1>
+          </div>
+          <p>
+            Quietly confident furniture and objects that bring a little more
+            feeling to the rooms you live in.
           </p>
+        </div>
+        <Filters
+          searchInput={searchInput}
+          setSearchInput={setSearchInput}
+          selectedCategory={selectedCategory}
+          setSelectedCategory={setSelectedCategory}
+        />
+      </section>
+      <section className="shop-section product-grid">
+        {loading ? (
+          <p className="empty-state">Loading products...</p>
         ) : (
           filteredProducts.map((product) => (
             <ProductCard

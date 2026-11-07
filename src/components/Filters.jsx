@@ -7,21 +7,19 @@ function Filters({
   setSelectedCategory,
 }) {
   return (
-    <div className="filters mb-4 flex w-full flex-col gap-3 px-3 sm:mb-6 sm:flex-row sm:justify-center sm:gap-6 sm:px-0">
-      {/* Search Bar */}
+    <div className="filters">
       <input
         type="text"
-        placeholder="Search products..."
+        placeholder="Search the collection"
         value={searchInput}
         onChange={(e) => setSearchInput(e.target.value)}
-        className="w-full rounded border border-gray-300 bg-slate-50 p-2 shadow-sm focus:outline-none focus:ring-2 focus:ring-yellow-400 sm:w-auto"
+        className="search-input"
       />
 
-      {/* Category Dropdown */}
       <select
         value={selectedCategory}
         onChange={(e) => setSelectedCategory(e.target.value)}
-        className="w-full rounded border border-gray-300 bg-slate-50 p-2 shadow-sm focus:outline-none focus:ring-2 focus:ring-yellow-400 sm:w-auto"
+        className="category-select"
       >
         <option value="">All Categories</option>
         <option value="electronics">Electronics</option>
