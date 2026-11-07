@@ -426,9 +426,30 @@ body[data-theme="dark"] .hero-slide-overlay {
   color: var(--paper);
 }
 .product-card:hover .add-button,
-.add-button:focus {
+.add-button:focus,
+.add-button.is-added {
   opacity: 1;
   transform: translateY(0);
+}
+.add-button.is-added,
+.add-button.is-added:hover {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--white);
+}
+.add-button.is-added svg {
+  animation: add-button-pop 260ms ease;
+}
+@keyframes add-button-pop {
+  0% {
+    transform: scale(0.4);
+  }
+  70% {
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(1);
+  }
 }
 .empty-state {
   grid-column: 1 / -1;

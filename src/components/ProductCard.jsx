@@ -1,11 +1,26 @@
 /** This component renders the product card for the home page on the app. */
 
+import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { useCart } from "../context/CartContext";
-import { FiArrowUpRight, FiShoppingBag } from "react-icons/fi";
+import { FiArrowUpRight, FiCheck, FiShoppingBag } from "react-icons/fi";
+
+const ADDED_FEEDBACK_MS = 1600;
 
 function ProductCard({ product }) {
   const { addToCart } = useCart();
+  const [added, setAdded] = useState(false);
+  const resetTimer = useRef(null);
+
+  useEffect(() => () => clearTimeout(resetTimer.current), []);
+
+  const handleAdd = (e) => {
+    e.preventDefault();
+    addToCart(product);
+    setAdded(true);
+    clearTimeout(resetTimer.current);
+    resetTimer.current = setTimeout(() => setAdded(false), ADDED_FEEDBACK_MS);
+  };
 
   return (
     <Link to={`/products/${product.id}`} className="product-card-link">
@@ -17,14 +32,15 @@ function ProductCard({ product }) {
             className="product-image"
           />
           <button
-            onClick={(e) => {
-              e.preventDefault();
-              addToCart(product);
-            }}
-            className="add-button"
-            aria-label={`Add ${product.title} to cart`}
+            onClick={handleAdd}
+            className={`add-button${added ? " is-added" : ""}`}
+            aria-label={
+              added
+                ? `${product.title} added to cart`
+                : `Add ${product.title} to cart`
+            }
           >
-            <FiShoppingBag />
+            {added ? <FiCheck /> : <FiShoppingBag />}
           </button>
         </div>
 
