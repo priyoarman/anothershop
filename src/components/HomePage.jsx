@@ -79,12 +79,12 @@ function HomePage({
       <section className="shop-section" id="shop">
         <div className="section-heading">
           <div>
-            <p className="hero-eyebrow">Curated for your home</p>
-            <h1>Find your new favorite piece</h1>
+            <p className="hero-eyebrow">Something for everyone</p>
+            <h1>Find your next favorite thing</h1>
           </div>
           <p>
-            Quietly confident furniture and objects that bring a little more
-            feeling to the rooms you live in.
+            Over 200 products across electronics, fashion, home, beauty,
+            groceries and more. Search, filter, or ask the shopping assistant.
           </p>
         </div>
         <Filters
