@@ -1,9 +1,13 @@
 /** This component renders the main page (HomePage) for the app. */
 
+import { useSearchParams } from "react-router-dom";
 import ProductCard from "./ProductCard";
+import Pagination from "./Pagination";
 import Filters from "./Filters";
 import HeroSlider from "./HeroSlider";
 import products from "../../lib/products.js";
+
+const PRODUCTS_PER_PAGE = 20;
 
 function HomePage({
   searchInput,
@@ -29,6 +33,46 @@ function HomePage({
     return matchesSearch && matchesCategory;
   });
 
+  // Current page lives in the URL (?page=2) so back/forward and shared links work.
+  const [searchParams, setSearchParams] = useSearchParams();
+  const totalPages = Math.max(
+    1,
+    Math.ceil(filteredProducts.length / PRODUCTS_PER_PAGE)
+  );
+  const requestedPage = Number.parseInt(searchParams.get("page"), 10) || 1;
+  const currentPage = Math.min(Math.max(requestedPage, 1), totalPages);
+  const pageProducts = filteredProducts.slice(
+    (currentPage - 1) * PRODUCTS_PER_PAGE,
+    currentPage * PRODUCTS_PER_PAGE
+  );
+
+  const goToPage = (page) => {
+    setSearchParams((params) => {
+      if (page <= 1) params.delete("page");
+      else params.set("page", String(page));
+      return params;
+    });
+    document.getElementById("shop")?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  // Changing the search or category starts again from page 1.
+  const resetPage = () =>
+    setSearchParams(
+      (params) => {
+        params.delete("page");
+        return params;
+      },
+      { replace: true }
+    );
+  const handleSearchChange = (value) => {
+    setSearchInput(value);
+    resetPage();
+  };
+  const handleCategoryChange = (value) => {
+    setSelectedCategory(value);
+    resetPage();
+  };
+
   return (
     <main className="min-h-dvh w-full overflow-x-hidden pb-6">
       <HeroSlider />
@@ -45,16 +89,16 @@ function HomePage({
         </div>
         <Filters
           searchInput={searchInput}
-          setSearchInput={setSearchInput}
+          setSearchInput={handleSearchChange}
           selectedCategory={selectedCategory}
-          setSelectedCategory={setSelectedCategory}
+          setSelectedCategory={handleCategoryChange}
         />
       </section>
       <section className="shop-section product-grid">
         {filteredProducts.length === 0 ? (
           <p className="empty-state">No products match your search.</p>
         ) : (
-          filteredProducts.map((product) => (
+          pageProducts.map((product) => (
             <ProductCard
               key={product.id}
               product={product}
@@ -63,6 +107,11 @@ function HomePage({
           ))
         )}
       </section>
+      <Pagination
+        currentPage={currentPage}
+        totalPages={totalPages}
+        onPageChange={goToPage}
+      />
     </main>
   );
 }
